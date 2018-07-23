@@ -1,0 +1,20 @@
+{
+  "name": "blogger-api",
+  "version": "1.0.0",
+  "description": "The greatest blog api ever",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.noveogroup.com/kleontjev/blogger-api.git"
+  },
+  "keywords": [
+    "blog",
+    "api",
+    "rest"
+  ],
+  "author": "j.u.p.iter (http://j-u-p-iter.com)",
+  "license": "ISC"
+}
