@@ -1,6 +1,6 @@
 {
   "presets": ["@babel/preset-env"],
   "plugins": [
-    "@babel/proposal-export-default-from"
+    "@babel/plugin-proposal-export-default-from"
   ]
 }
