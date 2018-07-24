@@ -23,7 +23,11 @@
     "@babel/core": "^7.0.0-beta.54",
     "@babel/node": "^7.0.0-beta.54",
     "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54"
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-eslint": "8",
+    "eslint": "^4.0.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0"
   },
   "dependencies": {
     "koa": "^2.5.2",
