@@ -13,7 +13,7 @@ const createServerConfig = (environmentObject) => {
   } = Joi.validate(environmentObject, envVarsSchema);
 
   if (error) {
-    throw Error(`Config validation error: ${error.message}`);
+    throw Error(`Server config validation error: ${error.message}`);
   }
 
   const {

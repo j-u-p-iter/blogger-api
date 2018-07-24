@@ -1,29 +1,7 @@
 import createServerConfig from '../serverConfig';
 
 
-describe('serverConfig', () => {
-  describe('when SERVER_PORT was not defined', () => {
-    it('should throw', () => {
-      const environmentObject = {
-        SERVER_HOST: 'some-host',
-      };
-
-      expect(createServerConfig.bind(null, environmentObject))
-        .toThrowError(/Config validation error/);
-    });
-  });
-
-  describe('when SERVER_HOST was not defined', () => {
-    it('should throw', () => {
-      const environmentObject = {
-        SERVER_PORT: 'some-port',
-      };
-
-      expect(createServerConfig.bind(null, environmentObject))
-        .toThrowError(/Config validation error/);
-    });
-  });
-
+describe('createServerConfig(environmentObject)', () => {
   describe('when SERVER_PORT and SERVER_HOST  was defined', () => {
     it('should return correct config', () => {
       const SERVER_PORT = 2000;
@@ -45,15 +23,37 @@ describe('serverConfig', () => {
     });
   });
 
+  describe('when SERVER_PORT was not defined', () => {
+    it('should throw', () => {
+      const environmentObject = {
+        SERVER_HOST: 'some-host',
+      };
+
+      expect(createServerConfig.bind(null, environmentObject))
+        .toThrowError(/Server config validation error/);
+    });
+  });
+
+  describe('when SERVER_HOST was not defined', () => {
+    it('should throw', () => {
+      const environmentObject = {
+        SERVER_PORT: 12345,
+      };
+
+      expect(createServerConfig.bind(null, environmentObject))
+        .toThrowError(/Server config validation error/);
+    });
+  });
+
   describe('when SERVER_PORT is not a number', () => {
     it('should throw', () => {
       const environmentObject = {
         SERVER_PORT: 'not-a-number',
-        SERVER_HOST: 'some-port',
+        SERVER_HOST: 'some-host',
       };
 
       expect(createServerConfig.bind(null, environmentObject))
-        .toThrowError(/Config validation error/);
+        .toThrowError(/Server config validation error/);
     });
   });
 
@@ -65,7 +65,7 @@ describe('serverConfig', () => {
       };
 
       expect(createServerConfig.bind(null, environmentObject))
-        .toThrowError(/Config validation error/);
+        .toThrowError(/Server config validation error/);
     });
   });
 });
