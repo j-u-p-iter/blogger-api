@@ -4,7 +4,8 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start:dev": "babel-node app"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,11 @@
     "rest"
   ],
   "author": "j.u.p.iter (http://j-u-p-iter.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/node": "^7.0.0-beta.54",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54"
+  }
 }
