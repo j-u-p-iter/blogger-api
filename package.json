@@ -4,6 +4,7 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
+    "precommit": "lint-staged",
     "test": "test",
     "start:dev": "pm2 start pm2.dev.json",
     "stop:dev": "pm2 stop blogger-api"
@@ -24,10 +25,14 @@
     "@babel/node": "^7.0.0-beta.54",
     "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "8",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint-plugin-import": "^2.13.0",
+    "husky": "^0.14.3",
+    "jest": "^23.4.1",
+    "lint-staged": "^7.2.0"
   },
   "dependencies": {
     "koa": "^2.5.2",
