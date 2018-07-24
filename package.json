@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "test",
-    "start:dev": "NODE_PATH=app babel-node app"
+    "start:dev": "pm2 start pm2.dev.json",
+    "stop:dev": "pm2 stop blogger-api"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "@babel/node": "^7.0.0-beta.54",
     "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54"
+  },
+  "dependencies": {
+    "pm2": "^3.0.0"
   }
 }
