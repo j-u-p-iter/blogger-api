@@ -37,6 +37,7 @@
     "lint-staged": "^7.2.0"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "joi": "^13.4.0",
     "koa": "^2.5.2",
     "pm2": "^3.0.0"

@@ -1,6 +1,4 @@
-import { usersController } from 'controllers';
-import app from './bootstrap';
+import * as utils from './utils';
 
 
-console.log(app);
-console.log(usersController);
+utils.setupEnvironment();
