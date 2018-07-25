@@ -21,12 +21,10 @@ const createServerConfig = (environmentObject) => {
     SERVER_HOST,
   } = envVars;
 
-  const serverConfig = {
-    server: {
-      PORT: SERVER_PORT,
-      HOST: SERVER_HOST,
-    },
-  };
+  const serverConfig = ({
+    SERVER_PORT,
+    SERVER_HOST,
+  });
 
   return serverConfig;
 };

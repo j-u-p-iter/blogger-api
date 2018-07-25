@@ -37,9 +37,13 @@
     "lint-staged": "^7.2.0"
   },
   "dependencies": {
+    "awilix": "^3.0.9",
     "dotenv": "^6.0.0",
     "joi": "^13.4.0",
     "koa": "^2.5.2",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.2.5",
     "pm2": "^3.0.0"
   }
 }
