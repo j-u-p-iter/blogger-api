@@ -1,9 +1,14 @@
 const createUsersRoutes = ({
   router,
+  userController,
 }) => {
-  router.get('/', (ctx) => {
-    ctx.body = 'Hello from users!';
-  });
+  router.post('/', userController.create);
+
+  router.get('/', userController.readAll);
+
+  router.put('/:userId', userController.update);
+
+  router.delete('/:userId', userController.deleteOne);
 
   return router.routes();
 };

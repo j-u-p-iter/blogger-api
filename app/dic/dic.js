@@ -4,7 +4,6 @@
 
 import Koa from 'koa';
 import Router from 'koa-router';
-import mongoose from 'mongoose';
 import {
   createContainer,
   asFunction,
@@ -13,6 +12,12 @@ import {
 
 import createConfigs from 'configs';
 import createHTTPServer from 'httpServer';
+import {
+  createUserModel,
+} from 'models';
+import {
+  createUserController,
+} from 'controllers';
 import createRoutes, {
   createUsersRoutes,
   createPostsRoutes,
@@ -22,6 +27,9 @@ import createRoutes, {
 import {
   createMongooseDBProvider,
 } from 'dbProviders';
+
+import createMiddlewares from 'middlewares';
+import * as utils from 'utils';
 
 
 const app = new Koa();
@@ -48,9 +56,15 @@ diContainer.register({
   commentsRoutes: asFunction(createCommentsRoutes),
   authRoutes: asFunction(createAuthRoutes),
 
-  dbProviders: asValue({ mongoose }),
-
   database: asFunction(createMongooseDBProvider),
+
+  userModel: asFunction(createUserModel),
+
+  userController: asFunction(createUserController),
+
+  middlewares: asFunction(createMiddlewares),
+
+  utils: asValue(utils),
 });
 
 

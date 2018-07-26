@@ -1,5 +1,7 @@
+import mongoose from 'mongoose';
+
+
 const createMongooseDBProvider = ({
-  dbProviders: { mongoose },
   configs: { DB_PORT, DB_HOST, DB_NAME },
 }) => {
   const connect = callback => mongoose.connect(
