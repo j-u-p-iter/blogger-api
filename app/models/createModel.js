@@ -10,7 +10,7 @@ const createModel = (modelName, schema) => {
 
   const create = data => model.create(data);
 
-  const readAll = () => model.find();
+  const readAll = () => model.find().enableCache();
 
   const update = (id, data) => model.findByIdAndUpdate(id, data, { new: true });
 

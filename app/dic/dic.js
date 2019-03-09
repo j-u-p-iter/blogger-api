@@ -27,6 +27,9 @@ import createRoutes, {
 import {
   createMongooseDBProvider,
 } from 'dbProviders';
+import {
+  createCacheService,
+} from 'services';
 
 import createMiddlewares from 'middlewares';
 import * as utils from 'utils';
@@ -50,6 +53,8 @@ diContainer.register({
   apiRouter: asValue(apiRouter),
 
   routes: asFunction(createRoutes),
+
+  cacheService: asFunction(createCacheService),
 
   usersRoutes: asFunction(createUsersRoutes),
   postsRoutes: asFunction(createPostsRoutes),

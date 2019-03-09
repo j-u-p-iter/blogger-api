@@ -17,6 +17,7 @@ const eslintConfig = {
   rules: {
     'global-require': 0,
     'import/prefer-default-export': 0,
+    'func-names': 0,
   },
 };
 

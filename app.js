@@ -11,6 +11,8 @@ const {
 
 dic.resolve('database').connect()
   .then(() => {
+    dic.resolve('cacheService');
+
     dic.resolve('httpServer').listen()
       .then(() => {
         console.log(`Server is running on http://${SERVER_HOST}:${SERVER_PORT}`);
