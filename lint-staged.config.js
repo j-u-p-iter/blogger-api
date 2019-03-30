@@ -1,7 +1,7 @@
 const lintStagedConfig = {
   '*.js': [
     'eslint --fix',
-    'jest --bail --findRelatedTests',
+    'cross-env NODE_PATH=./app jest --bail --findRelatedTests',
     'git add',
   ],
 };

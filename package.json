@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "precommit": "lint-staged",
-    "test": "jest",
+    "test": "NODE_PATH=./app jest",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2 start pm2.dev.json",
     "stop:dev": "pm2 stop blogger-api"
@@ -29,12 +29,14 @@
     "babel-core": "^7.0.0-0",
     "babel-eslint": "8",
     "babel-jest": "^23.4.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.13.0",
     "husky": "^0.14.3",
     "jest": "^23.4.1",
-    "lint-staged": "^7.2.0"
+    "lint-staged": "^7.2.0",
+    "superagent": "^5.0.2"
   },
   "dependencies": {
     "await-to-js": "^2.0.1",

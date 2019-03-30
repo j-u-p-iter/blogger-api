@@ -72,4 +72,4 @@ diContainer.register({
 });
 
 
-export default diContainer;
+export { diContainer };

@@ -4,13 +4,15 @@ const createHTTPServer = ({
   middlewares,
   configs: { SERVER_PORT, SERVER_HOST },
 }) => {
+  let httpServer;
+
   const listen = () => (
     new Promise((resolve, reject) => {
       app
         .use(...middlewares)
         .use(routes);
 
-      const httpServer = app.listen(SERVER_PORT, SERVER_HOST, () => {
+      httpServer = app.listen(SERVER_PORT, SERVER_HOST, () => {
         resolve(httpServer);
       });
 
@@ -18,7 +20,9 @@ const createHTTPServer = ({
     })
   );
 
-  return { listen };
+  const close = () => httpServer.close();
+
+  return { listen, close };
 };
 
 

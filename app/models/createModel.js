@@ -15,11 +15,14 @@ const createModel = (modelName, schema) => {
 
   const deleteOne = id => model.findByIdAndDelete(id);
 
+  const deleteAll = callback => model.deleteMany({}, callback);
+
   return {
     readAll,
     create,
     update,
     deleteOne,
+    deleteAll,
   };
 };
 

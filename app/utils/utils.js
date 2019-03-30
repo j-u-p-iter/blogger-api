@@ -1,3 +1,14 @@
+import path from 'path';
+
+
+const setupEnvironment = () => {
+  const resolvePath = relativePath => path.resolve(__dirname, relativePath);
+  const { NODE_ENV } = process.env;
+  const configPath = resolvePath(NODE_ENV === 'test' ? '../../.env.test' : '../../.env');
+
+  require('dotenv').config(configPath);
+};
+
 const responseWithSuccess = ({
   res,
   data = {},
@@ -34,4 +45,5 @@ const responseWithError = ({
 export {
   responseWithSuccess,
   responseWithError,
+  setupEnvironment,
 };

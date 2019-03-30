@@ -1,1 +1,1 @@
-export default from './dic';
+export { diContainer as dic } from './dic';
