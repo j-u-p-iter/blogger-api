@@ -10,9 +10,7 @@ const responseWithSuccess = ({
     ...data,
   };
 
-  res.status = status;
-
-  res.body = resultData;
+  res.status(status).json(resultData);
 };
 
 const responseWithError = ({

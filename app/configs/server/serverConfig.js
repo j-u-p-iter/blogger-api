@@ -12,19 +12,10 @@ const createServerConfig = (environmentObject) => {
     value: envVars,
   } = Joi.validate(environmentObject, envVarsSchema);
 
-  if (error) {
-    throw Error(`Server config validation error: ${error.message}`);
-  }
+  if (error) { throw Error(`Server config validation error: ${error.message}`); }
 
-  const {
-    SERVER_PORT,
-    SERVER_HOST,
-  } = envVars;
-
-  const serverConfig = ({
-    SERVER_PORT,
-    SERVER_HOST,
-  });
+  const { SERVER_PORT, SERVER_HOST } = envVars;
+  const serverConfig = { SERVER_PORT, SERVER_HOST };
 
   return serverConfig;
 };

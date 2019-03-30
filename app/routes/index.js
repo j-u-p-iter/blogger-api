@@ -1,6 +1,6 @@
-export { default as createUsersRoutes } from './usersRoutes';
-export { default as createPostsRoutes } from './postsRoutes';
-export { default as createCommentsRoutes } from './commentsRoutes';
-export { default as createAuthRoutes } from './authRoutes';
+export { createUsersRoutes } from './usersRoutes';
+export { createAuthRoutes } from './authRoutes';
+export { createPostsRoutes } from './postsRoutes';
+export { createCommentsRoutes } from './commentsRoutes';
 
 export default from './routes';

@@ -1,0 +1,1 @@
+export { createCommentsRoutes } from './commentsRoutes';

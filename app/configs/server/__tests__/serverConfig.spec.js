@@ -2,7 +2,7 @@ import createServerConfig from '../serverConfig';
 
 
 describe('createServerConfig(environmentObject)', () => {
-  describe('when SERVER_PORT and SERVER_HOST  was defined', () => {
+  describe('when SERVER_PORT and SERVER_HOST was defined', () => {
     it('should return correct config', () => {
       const SERVER_PORT = 2000;
       const SERVER_HOST = 'some-host';
@@ -12,14 +12,8 @@ describe('createServerConfig(environmentObject)', () => {
       };
 
       const result = createServerConfig(environmentObject);
-      const expected = {
-        server: {
-          PORT: SERVER_PORT,
-          HOST: SERVER_HOST,
-        },
-      };
 
-      expect(result).toEqual(expected);
+      expect(result).toMatchSnapshot();
     });
   });
 

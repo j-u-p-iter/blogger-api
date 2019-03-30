@@ -9,9 +9,8 @@ const createUserController = ({
     responseWithError,
   },
 }) => {
-  const create = async (ctx) => {
-    const userData = ctx.request.body;
-    const { response: res } = ctx;
+  const create = async (req, res) => {
+    const userData = req.body;
 
     const [err, user] = await to(userModel.create(userData));
 
@@ -31,9 +30,7 @@ const createUserController = ({
     });
   };
 
-  const readAll = async (ctx) => {
-    const { response: res } = ctx;
-
+  const readAll = async (req, res) => {
     const [err, users] = await to(userModel.readAll());
 
     if (err) {
@@ -51,10 +48,9 @@ const createUserController = ({
     });
   };
 
-  const update = async (ctx) => {
-    const { response: res } = ctx;
-    const userDataToUpdate = ctx.request.body;
-    const { userId } = ctx.params;
+  const update = async (req, res) => {
+    const userDataToUpdate = req.body;
+    const { userId } = req.params;
 
     const [err, user] = await to(userModel.update(userId, userDataToUpdate));
 
@@ -74,9 +70,8 @@ const createUserController = ({
     });
   };
 
-  const deleteOne = async (ctx) => {
-    const { response: res } = ctx;
-    const { userId } = ctx.params;
+  const deleteOne = async (req, res) => {
+    const { userId } = req.params;
 
     const [err] = await to(userModel.deleteOne(userId));
 

@@ -23,11 +23,11 @@ const createDBConfig = (environmentObject) => {
     DB_NAME,
   } = envVars;
 
-  const databaseConfig = ({
+  const databaseConfig = {
     DB_PORT,
     DB_HOST,
     DB_NAME,
-  });
+  };
 
   return databaseConfig;
 };

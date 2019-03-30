@@ -1,0 +1,1 @@
+export { createPostsRoutes } from './postsRoutes';

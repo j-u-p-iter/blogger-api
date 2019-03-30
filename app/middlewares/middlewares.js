@@ -1,9 +1,4 @@
-import createCommonMiddlewares from './commonMiddlewares';
-
-
-const createMiddlewares = () => [
-  ...createCommonMiddlewares(),
-];
+const createMiddlewares = () => [(req, res, next) => { next(); }];
 
 
 export default createMiddlewares;

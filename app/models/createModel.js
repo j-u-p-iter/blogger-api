@@ -7,7 +7,6 @@ const createModel = (modelName, schema) => {
 
   const model = mongoose.model(modelName, schema);
 
-
   const create = data => model.create(data);
 
   const readAll = () => model.find().enableCache();

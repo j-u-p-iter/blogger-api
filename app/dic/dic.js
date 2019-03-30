@@ -2,8 +2,7 @@
 // Cause DI pattern rocks.
 // (This is the only place where hardcoded dependencies should be located)
 
-import Koa from 'koa';
-import Router from 'koa-router';
+import express, { Router } from 'express';
 import {
   createContainer,
   asFunction,
@@ -35,8 +34,8 @@ import createMiddlewares from 'middlewares';
 import * as utils from 'utils';
 
 
-const app = new Koa();
-const apiRouter = new Router({ prefix: '/api/v1' });
+const app = express();
+const apiRouter = new Router();
 const diContainer = createContainer();
 
 diContainer.register({

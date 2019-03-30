@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createDBConfig(environmentObject) when DB_PORT, DB_HOST and DB_NAME  was defined should return correct config 1`] = `
+Object {
+  "DB_HOST": "some-host",
+  "DB_NAME": "some-db-name",
+  "DB_PORT": 2000,
+}
+`;

@@ -14,15 +14,8 @@ describe('createDBConfig(environmentObject)', () => {
       };
 
       const result = createDBConfig(environmentObject);
-      const expected = {
-        database: {
-          PORT: DB_PORT,
-          HOST: DB_HOST,
-          NAME: DB_NAME,
-        },
-      };
 
-      expect(result).toEqual(expected);
+      expect(result).toMatchSnapshot();
     });
   });
 

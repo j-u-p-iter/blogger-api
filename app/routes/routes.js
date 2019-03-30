@@ -15,11 +15,11 @@ const createRoutes = ({
   Object.keys(mapPathsToRoutes).forEach((path) => {
     const routes = mapPathsToRoutes[path];
 
-    if (routes) { apiRouter.use(path, routes); }
+    if (routes) { apiRouter.use(`/api/v1${path}`, routes); }
   });
 
 
-  return apiRouter.routes();
+  return apiRouter;
 };
 
 
