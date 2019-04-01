@@ -6,7 +6,7 @@ const setupEnvironment = () => {
   const { NODE_ENV } = process.env;
   const configPath = resolvePath(NODE_ENV === 'test' ? '../../.env.test' : '../../.env');
 
-  require('dotenv').config(configPath);
+  require('dotenv').config({ path: configPath });
 };
 
 const responseWithSuccess = ({

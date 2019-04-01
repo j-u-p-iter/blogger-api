@@ -15,7 +15,7 @@ describe('utils', () => {
         utils.setupEnvironment();
 
         expect(configureEnvironment).toHaveBeenCalledTimes(1);
-        expect(configureEnvironment.mock.calls[0]).toEqual([path.resolve(__dirname, '../../.env.test')]);
+        expect(configureEnvironment.mock.calls[0][0]).toEqual({ path: path.resolve(__dirname, '../../.env.test') });
       });
     });
   });
