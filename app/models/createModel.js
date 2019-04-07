@@ -9,6 +9,8 @@ const createModel = (modelName, schema) => {
 
   const create = data => model.create(data);
 
+  const insertMany = data => model.insertMany(data);
+
   const readAll = () => model.find().enableCache();
 
   const update = (id, data) => model.findByIdAndUpdate(id, data, { new: true });
@@ -20,6 +22,7 @@ const createModel = (modelName, schema) => {
   return {
     readAll,
     create,
+    insertMany,
     update,
     deleteOne,
     deleteAll,
