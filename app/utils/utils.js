@@ -34,11 +34,7 @@ const responseWithError = ({
     error: err.message,
   };
 
-  if (status) {
-    res.status = status;
-  }
-
-  res.body = resultData;
+  res.status(status).json(resultData)
 };
 
 

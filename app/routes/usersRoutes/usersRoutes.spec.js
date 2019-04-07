@@ -1,5 +1,6 @@
 import request from 'superagent';
 import HTTPStatus from 'http-status';
+import to from 'await-to-js';
 
 import { dic } from 'dic';
 import { runApp } from '../..';
@@ -73,7 +74,7 @@ describe('usersRoutes', () => {
       expect(resultSecondUser.password).toBeDefined();
     });
   });
-
+  
   describe('post to api/v1/users', () => {
     let userToCreate;
 
@@ -87,14 +88,14 @@ describe('usersRoutes', () => {
 
     describe('with correct data', () => {
       it('creates user properly', async () => {
-        const {
-          status,
-          body: {
-            user,
-            success,
+        const { 
+          status, 
+          body: { 
+            user, 
+            success, 
             message,
-          },
-        } = await request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate).set('Accept', 'application/json');
+          } 
+        } = await request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate);
 
         expect(status).toBe(HTTPStatus.CREATED);
         expect(success).toBe(true);
@@ -104,11 +105,25 @@ describe('usersRoutes', () => {
         expect(user.name).toEqual(userToCreate.name);
         expect(user.password).toBeDefined();
       });
-    });
+    })
 
     describe('with incorrect data', () => {
-      it('returns correct error', () => {
+      let userToCreate;
 
+      beforeAll(async () => {
+        userToCreate = {
+          name: 'someName',
+          email: 'invalidEmail',
+          password: 12345,
+        };
+      });
+
+      it('returns correct error', async () => {
+        const [{ status, response: { body: error } }] = await to(request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate));
+
+        expect(status).toBe(HTTPStatus.BAD_REQUEST);
+        expect(error.success).toBe(false);
+        expect(error.error).toBeDefined();
       });
     });
   });
