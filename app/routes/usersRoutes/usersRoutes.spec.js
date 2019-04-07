@@ -73,4 +73,43 @@ describe('usersRoutes', () => {
       expect(resultSecondUser.password).toBeDefined();
     });
   });
+
+  describe('post to api/v1/users', () => {
+    let userToCreate;
+
+    beforeAll(async () => {
+      userToCreate = {
+        name: 'someName',
+        email: 'some@email.com',
+        password: 12345,
+      };
+    });
+
+    describe('with correct data', () => {
+      it('creates user properly', async () => {
+        const {
+          status,
+          body: {
+            user,
+            success,
+            message,
+          },
+        } = await request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate).set('Accept', 'application/json');
+
+        expect(status).toBe(HTTPStatus.CREATED);
+        expect(success).toBe(true);
+        expect(message).toBe('Create user with success');
+
+        expect(user.email).toEqual(userToCreate.email);
+        expect(user.name).toEqual(userToCreate.name);
+        expect(user.password).toBeDefined();
+      });
+    });
+
+    describe('with incorrect data', () => {
+      it('returns correct error', () => {
+
+      });
+    });
+  });
 });
