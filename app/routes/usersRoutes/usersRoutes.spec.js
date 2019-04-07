@@ -1,4 +1,5 @@
 import request from 'superagent';
+import HTTPStatus from 'http-status';
 
 import { dic } from 'dic';
 import { runApp } from '../..';
@@ -46,26 +47,26 @@ describe('usersRoutes', () => {
     });
 
     it('returns all users', async () => {
-      const { body: { users } } = await request.get(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`);
+      const { status, body: { users, success, message } } = await request.get(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`);
 
-      const resultCount = users.length;
-      const expectedCount = insertingUsers.length;
-
-      expect(resultCount).toBe(expectedCount);
-
-      const resultFirstUser = users[0];
-      const resultSecondUser = users[1];
-
-      const expectedFirstUser = insertingUsers[0];
-      const expectedSecondUser = insertingUsers[1];
+      expect(users.length).toBe(insertingUsers.length);
+      expect(success).toBe(true);
+      expect(status).toBe(HTTPStatus.OK);
+      expect(message).toBe('Retrieve users with success');
 
       // assertions for first user
+      const resultFirstUser = users[0];
+      const expectedFirstUser = insertingUsers[0];
+
       expect(resultFirstUser.email).toBe(expectedFirstUser.email);
       expect(resultFirstUser.name).toBe(expectedFirstUser.name);
       expect(resultFirstUser.role).toBe('user');
       expect(resultFirstUser.password).toBeDefined();
 
       // assertions for sedond user
+      const resultSecondUser = users[1];
+      const expectedSecondUser = insertingUsers[1];
+
       expect(resultSecondUser.email).toBe(expectedSecondUser.email);
       expect(resultSecondUser.name).toBe(expectedSecondUser.name);
       expect(resultSecondUser.role).toBe('admin');
