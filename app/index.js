@@ -2,7 +2,7 @@ import { dic } from 'dic';
 import * as utils from './utils';
 
 
-export const runApp = (onSuccessRun) => {
+export const runApp = (onSuccessRun = () => {}) => {
   utils.setupEnvironment();
 
   const {

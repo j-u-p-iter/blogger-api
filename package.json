@@ -51,7 +51,9 @@
     "mongoose": "^5.2.5",
     "mongoose-unique-validator": "^2.0.1",
     "mongoose-validator": "^2.0.2",
+    "morgan": "^1.9.1",
     "pm2": "^3.0.0",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "winston": "^3.2.1"
   }
 }

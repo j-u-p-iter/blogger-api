@@ -1,6 +1,6 @@
 {
   "name": "blogger-api",
-  "script": "./app.js",
+  "script": "./index.js",
   "watch": true,
   "ignore_watch": ["node_modules"],
   "interpreter": "babel-node",
