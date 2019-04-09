@@ -1,6 +1,7 @@
 import request from 'superagent';
 import HTTPStatus from 'http-status';
 import to from 'await-to-js';
+import { makeUrl } from '@j.u.p.iter/node-utils';
 
 import { dic } from 'dic';
 import { runApp } from '../..';
@@ -48,7 +49,8 @@ describe('usersRoutes', () => {
     });
 
     it('returns all users', async () => {
-      const { status, body: { users, success, message } } = await request.get(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`);
+      const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' })
+      const { status, body: { users, success, message } } = await request.get(url);
 
       expect(users.length).toBe(insertingUsers.length);
       expect(success).toBe(true);
@@ -88,6 +90,7 @@ describe('usersRoutes', () => {
 
     describe('with correct data', () => {
       it('creates user properly', async () => {
+        const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' });
         const { 
           status, 
           body: { 
@@ -95,7 +98,7 @@ describe('usersRoutes', () => {
             success, 
             message,
           } 
-        } = await request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate);
+        } = await request.post(url).send(userToCreate);
 
         expect(status).toBe(HTTPStatus.CREATED);
         expect(success).toBe(true);
@@ -119,7 +122,8 @@ describe('usersRoutes', () => {
       });
 
       it('returns correct error', async () => {
-        const [{ status, response: { body: error } }] = await to(request.post(`http://${SERVER_HOST}:${SERVER_PORT}/api/v1/users`).send(userToCreate));
+        const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' }); 
+        const [{ status, response: { body: error } }] = await to(request.post(url).send(userToCreate));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
         expect(error.success).toBe(false);

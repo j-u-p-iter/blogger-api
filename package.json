@@ -4,7 +4,6 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
-    "precommit": "lint-staged",
     "test": "NODE_PATH=./app NODE_ENV=test jest",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2 start pm2.dev.json",
@@ -39,6 +38,7 @@
     "superagent": "^5.0.2"
   },
   "dependencies": {
+    "@j.u.p.iter/node-utils": "^1.1.0",
     "await-to-js": "^2.0.1",
     "awilix": "^3.0.9",
     "body-parser": "^1.18.3",

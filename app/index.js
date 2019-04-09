@@ -1,5 +1,6 @@
 import { dic } from 'dic';
 import * as utils from './utils';
+import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
 export const runApp = (onSuccessRun = () => {}) => {
@@ -17,7 +18,7 @@ export const runApp = (onSuccessRun = () => {}) => {
       dic.resolve('httpServer').listen()
         .then(() => {
           /* eslint-disable-next-line */
-          console.log(`Server is running on http://${SERVER_HOST}:${SERVER_PORT}`);
+          console.log(`Server is running on ${makeUrl({ host: SERVER_HOST, port: SERVER_PORT })}`);
 
           onSuccessRun();
         })

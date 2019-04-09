@@ -641,6 +641,15 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@j.u.p.iter/node-utils@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@j.u.p.iter/node-utils/-/node-utils-1.1.0.tgz#194c4fdaeb6a018347303db411e0101460498488"
+  integrity sha512-xDrLAmtTvIBVMjhNbw6RKHvPXMgCv4zfE3n1nCN8UwXb83SEHgFMxCDYA3ks0Ri7yl7skNtbAtYSAafYUdeM5Q==
+  dependencies:
+    "@types/qs" "^6.5.2"
+    path-to-regexp "^2.4.0"
+    qs "^6.7.0"
+
 "@pm2/agent@^0.5.4":
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/@pm2/agent/-/agent-0.5.10.tgz#96f23e37f963db9f55b99d9fb6a3edc369839171"
@@ -701,6 +710,11 @@
 "@types/node@*":
   version "10.5.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.3.tgz#5bcfaf088ad17894232012877669634c06b20cc5"
+
+"@types/qs@^6.5.2":
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.2.tgz#7f347062655056662845ba4bb79dcbfdc382cd61"
+  integrity sha512-47kAAs3yV/hROraCTQYDMh4p/6zI9+gtssjD0kq9OWsGdLcBge59rl49FnCuJ+iWxEKiqFz6KXzeGH5DRVjNJA==
 
 abab@^1.0.4:
   version "1.0.4"
@@ -4508,6 +4522,11 @@ path-to-regexp@^1.1.1:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.7.0.tgz#59fde0f435badacba103a84e9d3bc64e96b9937d"
   dependencies:
     isarray "0.0.1"
+
+path-to-regexp@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.4.0.tgz#35ce7f333d5616f1c1e1bfe266c3aba2e5b2e704"
+  integrity sha512-G6zHoVqC6GGTQkZwF4lkuEyMbVOjoBKAEybQUypI1WTkqinCOrq2x6U2+phkJ1XsEMTy4LjtwPI7HW+NVrRR2w==
 
 path-type@^1.0.0:
   version "1.1.0"
