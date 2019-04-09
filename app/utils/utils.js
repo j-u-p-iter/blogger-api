@@ -1,7 +1,7 @@
 import path from 'path';
 
 
-const setupEnvironment = () => {
+export const setupEnvironment = () => {
   const resolvePath = relativePath => path.resolve(__dirname, relativePath);
   const { NODE_ENV } = process.env;
   const configPath = resolvePath(NODE_ENV === 'test' ? '../../.env.test' : '../../.env');
@@ -9,37 +9,39 @@ const setupEnvironment = () => {
   require('dotenv').config({ path: configPath });
 };
 
-const responseWithSuccess = ({
-  res,
-  data = {},
-  status,
-  message,
+export const createUtils = ({
+  configs: { SERVER_HOST, SERVER_PORT }
 }) => {
-  const resultData = {
-    success: true,
+  const responseWithSuccess = ({
+    res,
+    data = {},
+    status,
     message,
-    ...data,
+  }) => {
+    const resultData = {
+      success: true,
+      message,
+      ...data,
+    };
+
+    res.status(status).json(resultData);
   };
 
-  res.status(status).json(resultData);
-};
+  const responseWithError = ({
+    res,
+    err,
+    status,
+  }) => {
+    const resultData = {
+      success: false,
+      error: err.message,
+    };
 
-const responseWithError = ({
-  res,
-  err,
-  status,
-}) => {
-  const resultData = {
-    success: false,
-    error: err.message,
+    res.status(status).json(resultData)
   };
 
-  res.status(status).json(resultData)
-};
-
-
-export {
-  responseWithSuccess,
-  responseWithError,
-  setupEnvironment,
+  return {
+    responseWithSuccess,
+    responseWithError,
+  };
 };

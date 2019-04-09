@@ -31,7 +31,7 @@ import {
 } from 'services';
 
 import createMiddlewares from 'middlewares';
-import * as utils from 'utils';
+import { createUtils } from 'utils';
 
 
 const app = express();
@@ -68,7 +68,7 @@ diContainer.register({
 
   middlewares: asFunction(createMiddlewares),
 
-  utils: asValue(utils),
+  utils: asFunction(createUtils),
 });
 
 

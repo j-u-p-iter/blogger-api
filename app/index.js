@@ -1,15 +1,18 @@
 import { dic } from 'dic';
-import * as utils from './utils';
 import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
 export const runApp = (onSuccessRun = () => {}) => {
+  const utils = dic.resolve('utils');
+
   utils.setupEnvironment();
 
   const {
     SERVER_PORT,
     SERVER_HOST,
   } = dic.resolve('configs');
+
+  
 
   dic.resolve('database').connect()
     .then(() => {
