@@ -4,6 +4,7 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
+    "precommit": "lint-staged",
     "test": "NODE_PATH=./app NODE_ENV=test jest",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2 start pm2.dev.json",
