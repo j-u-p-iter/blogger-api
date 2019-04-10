@@ -45,7 +45,7 @@ export const createUtils = ({
     const url = makeUrl({
       host: SERVER_HOST,
       port: SERVER_PORT,
-      path: `api/v1/${path}`,
+      path: `/api/v1/${path}`,
     });
 
     return url;

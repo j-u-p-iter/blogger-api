@@ -19,8 +19,6 @@ describe('usersRoutes', () => {
 
       ({ SERVER_PORT, SERVER_HOST } = dic.resolve('configs'));
 
-      console.log(SERVER_PORT)
-      console.log(SERVER_HOST)
       done();
     });
   });
@@ -53,7 +51,7 @@ describe('usersRoutes', () => {
     });
 
     it('returns all users', async () => {
-      const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' })
+      const url = usersUrls.get();
       const { status, body: { users, success, message } } = await request.get(url);
 
       expect(users.length).toBe(insertingUsers.length);
@@ -94,7 +92,7 @@ describe('usersRoutes', () => {
 
     describe('with correct data', () => {
       it('creates user properly', async () => {
-        const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' });
+        const url = usersUrls.post();
         const { 
           status, 
           body: { 
@@ -126,7 +124,7 @@ describe('usersRoutes', () => {
       });
 
       it('returns correct error', async () => {
-        const url = makeUrl({ host: SERVER_HOST, port: SERVER_PORT, path: '/api/v1/users' }); 
+        const url = usersUrls.post(); 
         const [{ status, response: { body: error } }] = await to(request.post(url).send(userToCreate));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
