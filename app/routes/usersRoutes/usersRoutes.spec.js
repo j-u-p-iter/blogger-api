@@ -11,11 +11,13 @@ describe('usersRoutes', () => {
   let SERVER_PORT;
   let SERVER_HOST;
   let usersUrls;
+  let extractResponse;
 
   beforeAll((done) => {
     runApp(() => {
       userModel = dic.resolve('userModel');
       usersUrls = dic.resolve('usersUrls');
+      extractResponse = dic.resolve('utils').extractResponse;
 
       ({ SERVER_PORT, SERVER_HOST } = dic.resolve('configs'));
 
@@ -52,7 +54,7 @@ describe('usersRoutes', () => {
 
     it('returns all users', async () => {
       const url = usersUrls.get();
-      const { status, body: { users, success, message } } = await request.get(url);
+      const { status, body: { users, success, message } } = await extractResponse(request.get(url));
 
       expect(users.length).toBe(insertingUsers.length);
       expect(success).toBe(true);
@@ -125,7 +127,7 @@ describe('usersRoutes', () => {
 
       it('returns correct error', async () => {
         const url = usersUrls.post(); 
-        const [{ status, response: { body: error } }] = await to(request.post(url).send(userToCreate));
+        const { status, body: error } = await extractResponse(request.post(url).send(userToCreate));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
         expect(error.success).toBe(false);

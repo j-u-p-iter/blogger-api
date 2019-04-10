@@ -1,5 +1,7 @@
 import path from 'path';
+import to from 'await-to-js';
 import { makeUrl } from '@j.u.p.iter/node-utils';
+
 
 
 export const setupEnvironment = () => {
@@ -51,9 +53,22 @@ export const createUtils = ({
     return url;
   };
 
+  const extractResponse = async (promise) => {
+    const [error, data] = await to(promise); 
+
+    if (data) {
+      return data;
+    }
+
+    const { status, response: { body } } = error;
+
+    return { status, body };
+  };
+
   return {
     responseWithSuccess,
     responseWithError,
     makeApiUrl,
+    extractResponse,
   };
 };
