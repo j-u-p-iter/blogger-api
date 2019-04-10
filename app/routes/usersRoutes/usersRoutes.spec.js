@@ -10,13 +10,17 @@ describe('usersRoutes', () => {
   let userModel;
   let SERVER_PORT;
   let SERVER_HOST;
+  let usersUrls;
 
   beforeAll((done) => {
     runApp(() => {
       userModel = dic.resolve('userModel');
+      usersUrls = dic.resolve('usersUrls');
 
       ({ SERVER_PORT, SERVER_HOST } = dic.resolve('configs'));
 
+      console.log(SERVER_PORT)
+      console.log(SERVER_HOST)
       done();
     });
   });

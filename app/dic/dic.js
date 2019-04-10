@@ -31,7 +31,8 @@ import {
 } from 'services';
 
 import createMiddlewares from 'middlewares';
-import { createUtils } from 'utils';
+import { createUtils, setupEnvironment } from 'utils';
+import { createUsersUrls } from 'urls';
 
 
 const app = express();
@@ -60,6 +61,8 @@ diContainer.register({
   commentsRoutes: asFunction(createCommentsRoutes),
   authRoutes: asFunction(createAuthRoutes),
 
+  usersUrls: asFunction(createUsersUrls),
+
   database: asFunction(createMongooseDBProvider),
 
   userModel: asFunction(createUserModel),
@@ -69,6 +72,8 @@ diContainer.register({
   middlewares: asFunction(createMiddlewares),
 
   utils: asFunction(createUtils),
+
+  setupEnvironment: asValue(setupEnvironment),
 });
 
 

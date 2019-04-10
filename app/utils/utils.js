@@ -1,4 +1,5 @@
 import path from 'path';
+import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
 export const setupEnvironment = () => {
@@ -40,8 +41,19 @@ export const createUtils = ({
     res.status(status).json(resultData)
   };
 
+  const makeApiUrl = (path) => {
+    const url = makeUrl({
+      host: SERVER_HOST,
+      port: SERVER_PORT,
+      path: `api/v1/${path}`,
+    });
+
+    return url;
+  };
+
   return {
     responseWithSuccess,
     responseWithError,
+    makeApiUrl,
   };
 };

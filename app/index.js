@@ -3,9 +3,11 @@ import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
 export const runApp = (onSuccessRun = () => {}) => {
-  const utils = dic.resolve('utils');
+  const setupEnvironment = dic.resolve('setupEnvironment');
 
-  utils.setupEnvironment();
+  console.log('hello')
+  setupEnvironment();
+  console.log('hi')
 
   const {
     SERVER_PORT,
