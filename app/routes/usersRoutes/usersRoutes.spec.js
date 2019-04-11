@@ -80,6 +80,35 @@ describe('usersRoutes', () => {
       expect(resultSecondUser.password).toBeDefined();
     });
   });
+
+  describe('get to api/v1/users/:userId', () => {
+    let userToAdd;
+    let addedUser;
+
+    beforeAll(async () => {
+      userToAdd = {
+        name: 'someName',
+        email: 'some@email.com',
+        password: 12345,
+      };
+
+      addedUser = await userModel.create(userToAdd);
+    });
+
+    it('returns user correctly', async () => {
+      const url = usersUrls.getOne(addedUser._id);
+
+      const { status, body: { user, success, message } } = await extractResponse(request.get(url));
+
+      expect(status).toBe(HTTPStatus.OK);
+      expect(success).toBe(true);
+
+      expect(user.name).toBe(userToAdd.name);
+      expect(user.email).toBe(userToAdd.email);
+      expect(user.role).toBe('user');
+      expect(user.password).toBeDefined();
+    });
+  });
   
   describe('post to api/v1/users', () => {
     let userToCreate;
@@ -112,7 +141,60 @@ describe('usersRoutes', () => {
         expect(user.name).toEqual(userToCreate.name);
         expect(user.password).toBeDefined();
       });
-    })
+    });
+
+    describe('with incorrect data', () => {
+      let userToCreate;
+
+      beforeAll(async () => {
+        userToCreate = {
+          name: 'someName',
+          email: 'invalidEmail',
+          password: 12345,
+        };
+      });
+
+      it('returns correct error', async () => {
+        const url = usersUrls.post(); 
+        const { status, body: error } = await extractResponse(request.post(url).send(userToCreate));
+
+        expect(status).toBe(HTTPStatus.BAD_REQUEST);
+        expect(error.success).toBe(false);
+        expect(error.error).toBeDefined();
+      });
+    });
+  });
+
+  describe('delete to api/v1/users/:userId', () => {
+    let userToAdd;
+    let createdUser;
+
+    beforeAll(async () => {
+      userToAdd = {
+        name: 'someName',
+        email: 'some@email.com',
+        password: 12345,
+      };
+
+      createdUser = await userModel.create(userToAdd);
+    });
+
+    describe('with correct id', () => {
+      it('creates user properly', async () => {
+        const url = usersUrls.delete(createdUser._id);
+        const { 
+          status, 
+          body: { 
+            success, 
+            message,
+          } 
+        } = await request.delete(url);
+
+        expect(status).toBe(HTTPStatus.OK);
+        expect(success).toBe(true);
+        expect(message).toBe('User deleted with success');
+      });
+    });
 
     describe('with incorrect data', () => {
       let userToCreate;

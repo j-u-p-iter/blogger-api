@@ -48,6 +48,25 @@ const createUserController = ({
     });
   };
 
+  const readOne = async (req, res) => {
+    const { userId } = req.params;
+    const [err, user] = await to(userModel.readOne(userId));
+
+    if (err) {
+      return responseWithError({
+        res,
+        err,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      data: { user },
+      status: HTTPStatus.OK,
+      message: 'Retrieve user with success',
+    });
+  };
+
   const update = async (req, res) => {
     const userDataToUpdate = req.body;
     const { userId } = req.params;
@@ -92,6 +111,7 @@ const createUserController = ({
   return {
     create,
     readAll,
+    readOne,
     update,
     deleteOne,
   };

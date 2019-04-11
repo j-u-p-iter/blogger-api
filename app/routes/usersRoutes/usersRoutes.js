@@ -1,12 +1,18 @@
 export const createUsersRoutes = ({
   router,
   userController: {
-    create, readAll, update, deleteOne,
+    create, 
+    readAll, 
+    readOne, 
+    update, 
+    deleteOne,
   },
 }) => {
   router.post('/', create);
 
   router.get('/', readAll);
+
+  router.get('/:userId', readOne);
 
   router.put('/:userId', update);
 

@@ -3,6 +3,7 @@ import to from 'await-to-js';
 import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
+const API_PATH_PART = '/api/v1';
 
 export const setupEnvironment = () => {
   const resolvePath = relativePath => path.resolve(__dirname, relativePath);
@@ -47,7 +48,7 @@ export const createUtils = ({
     const url = makeUrl({
       host: SERVER_HOST,
       port: SERVER_PORT,
-      path: `/api/v1/${path}`,
+      path: `${API_PATH_PART}/${path}`,
     });
 
     return url;
@@ -56,9 +57,7 @@ export const createUtils = ({
   const extractResponse = async (promise) => {
     const [error, data] = await to(promise); 
 
-    if (data) {
-      return data;
-    }
+    if (data) { return data; }
 
     const { status, response: { body } } = error;
 
