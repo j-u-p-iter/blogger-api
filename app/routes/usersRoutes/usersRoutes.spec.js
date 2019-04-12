@@ -176,22 +176,76 @@ describe('usersRoutes', () => {
     });
   });
 
-  describe('delete to api/v1/users/:userId', () => {
-    let userToAdd;
-    let createdUser;
+  describe('put to api/v1/users/:userId', () => {
+    let userToUpdate;
 
     beforeAll(async () => {
-      userToAdd = {
+      userToUpdate = {
         name: 'someName',
         email: 'some@email.com',
         password: 12345,
       };
 
-      createdUser = await userModel.create(userToAdd);
+      const { _id } = await userModel.create(userToUpdate); 
+
+      userToUpdate = {
+        ...userToUpdate,
+        _id,
+      };
+    });
+
+    describe('with correct user id', () => {
+      it('updates user properly', async () => {
+        const url = usersUrls.patch(userToUpdate._id);
+        const dataToUpdate = { name: 'someNewName', email: 'new@email.com' }
+        const { 
+          status, 
+          body: { 
+            user,
+            success, 
+            message,
+          } 
+        } = await extractResponse(request.put(url).send(dataToUpdate));
+
+        expect(status).toBe(HTTPStatus.OK);
+        expect(success).toBe(true);
+        expect(message).toBe('Update user with success')
+        expect(user.name).toBe(dataToUpdate.name);
+        expect(user.email).toBe(dataToUpdate.email);
+        expect(user.password).toBeDefined();
+      });
+    });
+
+    describe('with incorrect id', () => {
+      it('returns correct error', async () => {
+        const url = usersUrls.patch(5); 
+        const { 
+          status, 
+          body, 
+        } = await extractResponse(request.put(url).send({ name: 'someNewName', email: 'new@email.com' }
+));
+
+        expect(status).toBe(HTTPStatus.BAD_REQUEST);
+        expect(body.success).toBe(false);
+      });
+    });
+  });
+
+  describe('delete to api/v1/users/:userId', () => {
+    let createdUser;
+
+    beforeAll(async () => {
+      const userToDelete = {
+        name: 'someName',
+        email: 'some@email.com',
+        password: 12345,
+      };
+
+      createdUser = await userModel.create(userToDelete);
     });
 
     describe('with correct id', () => {
-      it('creates user properly', async () => {
+      it('deletes user properly', async () => {
         const url = usersUrls.delete(createdUser._id);
         const { 
           status, 
@@ -218,3 +272,5 @@ describe('usersRoutes', () => {
     });
   });
 });
+
+// refactor delete and getOne routes specs according to update route spec.
