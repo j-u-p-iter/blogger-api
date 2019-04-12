@@ -232,21 +232,26 @@ describe('usersRoutes', () => {
   });
 
   describe('delete to api/v1/users/:userId', () => {
-    let createdUser;
+    let userToDelete;
 
     beforeAll(async () => {
-      const userToDelete = {
+      userToDelete = {
         name: 'someName',
         email: 'some@email.com',
         password: 12345,
       };
 
-      createdUser = await userModel.create(userToDelete);
+      const { _id } = await userModel.create(userToDelete);
+
+      userToDelete = {
+        ...userToDelete,
+        _id,
+      };
     });
 
     describe('with correct id', () => {
       it('deletes user properly', async () => {
-        const url = usersUrls.delete(createdUser._id);
+        const url = usersUrls.delete(userToDelete._id);
         const { 
           status, 
           body: { 
