@@ -108,6 +108,17 @@ describe('usersRoutes', () => {
       expect(user.role).toBe('user');
       expect(user.password).toBeDefined();
     });
+
+    describe('with incorrect user id', () => {
+      it('returns correct error', async () => {
+        const url = usersUrls.getOne(5);
+        const { status, body } = await extractResponse(request.get(url));
+
+        expect(status).toBe(HTTPStatus.BAD_REQUEST);
+        expect(body.success).toBe(false);
+        expect(body.error).toBeDefined();
+      });
+    });
   });
   
   describe('post to api/v1/users', () => {
