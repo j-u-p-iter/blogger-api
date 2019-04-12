@@ -98,6 +98,7 @@ const createUserController = ({
       return responseWithError({
         res,
         err,
+        status: HTTPStatus.BAD_REQUEST,
       });
     }
 

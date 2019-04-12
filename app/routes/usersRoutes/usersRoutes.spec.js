@@ -196,24 +196,13 @@ describe('usersRoutes', () => {
       });
     });
 
-    describe('with incorrect data', () => {
-      let userToCreate;
-
-      beforeAll(async () => {
-        userToCreate = {
-          name: 'someName',
-          email: 'invalidEmail',
-          password: 12345,
-        };
-      });
-
+    describe('with incorrect id', () => {
       it('returns correct error', async () => {
-        const url = usersUrls.post(); 
-        const { status, body: error } = await extractResponse(request.post(url).send(userToCreate));
+        const url = usersUrls.delete(5); 
+        const { status, body } = await extractResponse(request.delete(url));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
-        expect(error.success).toBe(false);
-        expect(error.error).toBeDefined();
+        expect(body.success).toBe(false);
       });
     });
   });
