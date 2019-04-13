@@ -68,7 +68,9 @@ describe('usersRoutes', () => {
       expect(resultFirstUser.email).toBe(expectedFirstUser.email);
       expect(resultFirstUser.name).toBe(expectedFirstUser.name);
       expect(resultFirstUser.role).toBe('user');
-      expect(resultFirstUser.password).toBeDefined();
+      expect(resultFirstUser.password).not.toBeDefined();
+      expect(resultFirstUser._id).not.toBeDefined();
+      expect(resultFirstUser.id).toBeDefined();
 
       // assertions for sedond user
       const resultSecondUser = users[1];
@@ -77,7 +79,9 @@ describe('usersRoutes', () => {
       expect(resultSecondUser.email).toBe(expectedSecondUser.email);
       expect(resultSecondUser.name).toBe(expectedSecondUser.name);
       expect(resultSecondUser.role).toBe('admin');
-      expect(resultSecondUser.password).toBeDefined();
+      expect(resultSecondUser.password).not.toBeDefined();
+      expect(resultFirstUser._id).not.toBeDefined();
+      expect(resultFirstUser.id).toBeDefined();
     });
   });
 
@@ -106,7 +110,9 @@ describe('usersRoutes', () => {
       expect(user.name).toBe(userToAdd.name);
       expect(user.email).toBe(userToAdd.email);
       expect(user.role).toBe('user');
-      expect(user.password).toBeDefined();
+      expect(user.password).not.toBeDefined();
+      expect(user._id).not.toBeDefined();
+      expect(user.id).toBeDefined();
     });
 
     describe('with incorrect user id', () => {
@@ -150,7 +156,9 @@ describe('usersRoutes', () => {
 
         expect(user.email).toEqual(userToCreate.email);
         expect(user.name).toEqual(userToCreate.name);
-        expect(user.password).toBeDefined();
+        expect(user.password).not.toBeDefined();
+        expect(user._id).not.toBeDefined();
+        expect(user.id).toBeDefined();
       });
     });
 
@@ -212,7 +220,9 @@ describe('usersRoutes', () => {
         expect(message).toBe('Update user with success')
         expect(user.name).toBe(dataToUpdate.name);
         expect(user.email).toBe(dataToUpdate.email);
-        expect(user.password).toBeDefined();
+        expect(user.password).not.toBeDefined();
+        expect(user._id).not.toBeDefined();
+        expect(user.id).toBeDefined();
       });
     });
 

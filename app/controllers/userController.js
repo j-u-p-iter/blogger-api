@@ -24,7 +24,7 @@ const createUserController = ({
 
     return responseWithSuccess({
       res,
-      data: { user: user.toJSON() },
+      data: { user: user.toClient() },
       status: HTTPStatus.CREATED,
       message: 'Create user with success',
     });
@@ -42,7 +42,7 @@ const createUserController = ({
 
     return responseWithSuccess({
       res,
-      data: { users },
+      data: { users: users.map(user => user.toClient()) },
       status: HTTPStatus.OK,
       message: 'Retrieve users with success',
     });
@@ -62,7 +62,7 @@ const createUserController = ({
 
     return responseWithSuccess({
       res,
-      data: { user },
+      data: { user: user.toClient() },
       status: HTTPStatus.OK,
       message: 'Retrieve user with success',
     });
@@ -84,7 +84,7 @@ const createUserController = ({
 
     return responseWithSuccess({
       res,
-      data: { user },
+      data: { user: user.toClient() },
       status: HTTPStatus.OK,
       message: 'Update user with success',
     });
