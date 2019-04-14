@@ -2,7 +2,7 @@ import { createDBConfig } from '../dbConfig';
 
 
 describe('createDBConfig(environmentObject)', () => {
-  describe('when DB_PORT, DB_HOST and DB_NAME  was defined', () => {
+  describe('when DB_PORT, DB_HOST and DB_NAME was defined', () => {
     it('should return correct config', () => {
       const DB_PORT = 2000;
       const DB_HOST = 'some-host';

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createAuthConfig(environmentObject) when PASSWORD_SALT_ROUNDS was defined properly should return correct config 1`] = `
+Object {
+  "PASSWORD_SALT_ROUNDS": 10,
+}
+`;
