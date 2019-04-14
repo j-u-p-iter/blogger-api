@@ -1,4 +1,4 @@
-import createDBConfig from '../dbConfig';
+import { createDBConfig } from '../dbConfig';
 
 
 describe('createDBConfig(environmentObject)', () => {

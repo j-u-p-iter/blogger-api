@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 
-const createDBConfig = (environmentObject) => {
+export const createDBConfig = (environmentObject) => {
   const envVarsSchema = Joi.object().keys({
     DB_PORT: Joi.number().required(),
     DB_HOST: Joi.string().required(),
@@ -31,6 +31,3 @@ const createDBConfig = (environmentObject) => {
 
   return databaseConfig;
 };
-
-
-export default createDBConfig;

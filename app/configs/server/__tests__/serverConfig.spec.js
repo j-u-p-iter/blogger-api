@@ -1,4 +1,4 @@
-import createServerConfig from '../serverConfig';
+import { createServerConfig } from '../serverConfig';
 
 
 describe('createServerConfig(environmentObject)', () => {

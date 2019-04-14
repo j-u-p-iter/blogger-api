@@ -1,1 +1,1 @@
-export default from './dbConfig';
+export { createDBConfig } from './dbConfig';

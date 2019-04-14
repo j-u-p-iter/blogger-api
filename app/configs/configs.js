@@ -1,5 +1,5 @@
-import createServerConfig from './server';
-import createDBConfig from './db';
+import { createServerConfig } from './server';
+import { createDBConfig } from './db';
 
 
 const processENV = process.env;

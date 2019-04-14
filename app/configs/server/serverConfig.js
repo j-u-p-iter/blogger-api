@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 
-const createServerConfig = (environmentObject) => {
+export const createServerConfig = (environmentObject) => {
   const envVarsSchema = Joi.object().keys({
     SERVER_PORT: Joi.number().required(),
     SERVER_HOST: Joi.string().required(),
@@ -19,6 +19,3 @@ const createServerConfig = (environmentObject) => {
 
   return serverConfig;
 };
-
-
-export default createServerConfig;

@@ -1,1 +1,1 @@
-export default from './serverConfig';
+export { createServerConfig } from './serverConfig';
