@@ -6,7 +6,7 @@ export const createAuthenticationService = ({
   configs: { PASSWORD_SALT_ROUNDS },
 }) => {
   const hashPassword = async (password) => {
-    const [error, hashedPassword] =  await to(bcrypt.hash(password, 10)); 
+    const [error, hashedPassword] =  await to(bcrypt.hash(password, PASSWORD_SALT_ROUNDS)); 
 
     throwError(error);
 
