@@ -64,10 +64,17 @@ export const createUtils = ({
     return { status, body };
   };
 
+  const throwError = (error) => {
+    if (!error) { return; }
+
+    throw new Error(error.message)
+  };
+
   return {
     responseWithSuccess,
     responseWithError,
     makeApiUrl,
     extractResponse,
+    throwError,
   };
 };

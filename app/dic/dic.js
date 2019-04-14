@@ -28,6 +28,7 @@ import {
 } from 'dbProviders';
 import {
   createCacheService,
+  createAuthenticationService,
 } from 'services';
 
 import createMiddlewares from 'middlewares';
@@ -55,6 +56,7 @@ diContainer.register({
   routes: asFunction(createRoutes),
 
   cacheService: asFunction(createCacheService),
+  authenticationService: asFunction(createAuthenticationService),
 
   usersRoutes: asFunction(createUsersRoutes),
   postsRoutes: asFunction(createPostsRoutes),

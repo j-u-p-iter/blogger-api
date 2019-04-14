@@ -1,10 +1,24 @@
-const createAuthenticationService = () => {
-  const hashPassword = () => {
+import bcrypt from 'bcrypt';
+import to from 'await-to-js';
 
+export const createAuthenticationService = ({
+  utils: { throwError },
+  configs: { PASSWORD_SALT_ROUNDS },
+}) => {
+  const hashPassword = async (password) => {
+    const [error, hashedPassword] =  await to(bcrypt.hash(password, 10)); 
+
+    throwError(error);
+
+    return hashedPassword;
   };
 
-  const comparePasswords = () => {
+  const checkPassword = async (newPassword, originalHashedPassword) => {
+    const [error, arePasswordsEqual] = await to(bcrypt.compare(newPassword, originalHashedPassword));
 
+    throwError(error);
+
+    return arePasswordsEqual;
   };
 
   const generateToken = () => {
@@ -13,11 +27,11 @@ const createAuthenticationService = () => {
 
   const decodeToken = () => {
 
-  }
+  };
 
   return {
     hashPassword,
-    comparePasswords,
+    checkPassword,
     generateToken,
     decodeToken,
   };
