@@ -4,6 +4,7 @@ import HTTPStatus from 'http-status';
 
 const createUserController = ({
   userModel,
+  authenticationService,
   utils: {
     responseWithSuccess,
     responseWithError,

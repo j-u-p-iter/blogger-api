@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import to from 'await-to-js';
 
 import * as validators from './validators';
 
@@ -36,6 +38,18 @@ const userSchema = new mongoose.Schema({
     validate: validators.passwordValidator,
   },
 }, { timestamps: true });
+
+userSchema.pre('save', async function (next) { 
+  const user = this;
+
+  if (!user.isModified('password')) { return next(); }
+
+  const [error, hashedPassword] =  await to(bcrypt.hash(user.password, 10)); 
+
+  if (error) { throw new Error(error.message); }
+
+  user.password = hashedPassword;
+});
 
 userSchema.methods.toClient = function() {
   const user = this.toJSON(); 
