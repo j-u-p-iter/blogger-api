@@ -15,6 +15,9 @@ import {
   createUserModel,
 } from 'models';
 import {
+  createUserSchema,
+} from 'schemas';
+import {
   createUserController,
 } from 'controllers';
 import createRoutes, {
@@ -66,6 +69,8 @@ diContainer.register({
   usersUrls: asFunction(createUsersUrls),
 
   database: asFunction(createMongooseDBProvider),
+
+  userSchema: asFunction(createUserSchema).singleton(),
 
   userModel: asFunction(createUserModel),
 
