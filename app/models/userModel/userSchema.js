@@ -51,6 +51,22 @@ userSchema.pre('save', async function (next) {
   user.password = hashedPassword;
 });
 
+
+// it's funny, that during so long time
+// mongoose doesn't have the way properly handle this case:
+// https://github.com/Automattic/mongoose/issues/4575
+userSchema.pre('findOneAndUpdate', async function (next) { 
+  const { password } = this.getUpdate();
+
+  if (!password) { return next(); }
+
+  const [error, hashedPassword] =  await to(bcrypt.hash(password, 10)); 
+
+  if (error) { throw new Error(error.message); }
+
+  this.getUpdate().password = hashedPassword;
+});
+
 userSchema.methods.toClient = function() {
   const user = this.toJSON(); 
 

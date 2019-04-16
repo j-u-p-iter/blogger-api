@@ -157,7 +157,6 @@ describe('usersRoutes', () => {
         expect(user.email).toEqual(userToCreate.email);
         expect(user.name).toEqual(userToCreate.name);
         expect(user.password).not.toBeDefined();
-        expect(user.password).not.toBe(userToCreate.password);
         expect(user._id).not.toBeDefined();
         expect(user.id).toBeDefined();
       });
