@@ -5,7 +5,9 @@ import to from 'await-to-js';
 import * as validators from './validators';
 
 
-export const createUserSchema = () => {
+export const createUserSchema = ({
+  authenticationService,
+}) => {
   const userSchema = new mongoose.Schema({
     name: {
       type: String,
@@ -45,9 +47,7 @@ export const createUserSchema = () => {
 
     if (!user.isModified('password')) { return next(); }
 
-    const [error, hashedPassword] =  await to(bcrypt.hash(user.password, 10)); 
-
-    if (error) { throw new Error(error.message); }
+    const hashedPassword = await authenticationService.hashPassword(user.password);
 
     user.password = hashedPassword;
   });
@@ -60,9 +60,7 @@ export const createUserSchema = () => {
 
     if (!password) { return next(); }
 
-    const [error, hashedPassword] =  await to(bcrypt.hash(password, 10)); 
-
-    if (error) { throw new Error(error.message); }
+    const hashedPassword = await authenticationService.hashPassword(password);
 
     this.getUpdate().password = hashedPassword;
   });

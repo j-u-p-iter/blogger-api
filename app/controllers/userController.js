@@ -2,7 +2,7 @@ import to from 'await-to-js';
 import HTTPStatus from 'http-status';
 
 
-const createUserController = ({
+export const createUserController = ({
   userModel,
   authenticationService,
   utils: {
@@ -119,6 +119,3 @@ const createUserController = ({
     deleteOne,
   };
 };
-
-
-export default createUserController;

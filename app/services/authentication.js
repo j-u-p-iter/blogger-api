@@ -22,11 +22,11 @@ export const createAuthenticationService = ({
   };
 
   const generateToken = () => {
-
+    return 'some token';
   };
 
   const decodeToken = () => {
-
+    return {};
   };
 
   return {

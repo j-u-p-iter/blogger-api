@@ -1,15 +1,11 @@
 import request from 'superagent';
 import HTTPStatus from 'http-status';
-import to from 'await-to-js';
-import { makeUrl } from '@j.u.p.iter/node-utils';
 
 import { dic } from 'dic';
 import { runApp } from '../..';
 
 describe('usersRoutes', () => {
   let userModel;
-  let SERVER_PORT;
-  let SERVER_HOST;
   let usersUrls;
   let extractResponse;
 
@@ -18,8 +14,6 @@ describe('usersRoutes', () => {
       userModel = dic.resolve('userModel');
       usersUrls = dic.resolve('usersUrls');
       extractResponse = dic.resolve('utils').extractResponse;
-
-      ({ SERVER_PORT, SERVER_HOST } = dic.resolve('configs'));
 
       done();
     });
