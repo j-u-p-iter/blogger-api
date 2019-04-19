@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
 import to from 'await-to-js';
+import { sign } from 'jsonwebtoken';
 
 export const createAuthenticationService = ({
   utils: { throwError },
-  configs: { PASSWORD_SALT_ROUNDS },
+  configs: { PASSWORD_SALT_ROUNDS, AUTH_TOKEN_SECRET },
 }) => {
   const hashPassword = async (password) => {
     const [error, hashedPassword] =  await to(bcrypt.hash(password, PASSWORD_SALT_ROUNDS)); 
@@ -21,8 +22,8 @@ export const createAuthenticationService = ({
     return arePasswordsEqual;
   };
 
-  const generateToken = () => {
-    return 'some token';
+  const generateToken = (userData) => {
+    return sign(userData, AUTH_TOKEN_SECRET);
   };
 
   const decodeToken = () => {

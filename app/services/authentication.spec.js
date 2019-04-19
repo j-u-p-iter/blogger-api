@@ -37,7 +37,12 @@ describe('createAuthenticationService', () => {
   });
 
   it('generates token properly', () => {
+    const userData = { id: 1, role: 'admin' };
 
+    const result = authenticationService.generateToken(userData);
+
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
   });
 
   it('decodes token properly', () => {
