@@ -12,9 +12,9 @@ export const createAuthController = ({
   const signUp = async (req, res) => {
     const userData = req.body;
 
-    const [err, user] = await to(userModel.create(userData0));
+    const [err, user] = await to(userModel.create(userData));
 
-    if (error) {
+    if (err) {
       return responseWithError({
         res,
         err,
@@ -26,7 +26,7 @@ export const createAuthController = ({
       res,
       data: { 
         user: user.toClient(), 
-        accessToken: authenticationService.createToken(user),
+        accessToken: authenticationService.generateToken({ id: user._id, role: user.role }),
       },
       status: HTTPStatus.CREATED,
       message: 'Sign Up with success',

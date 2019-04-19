@@ -4,7 +4,6 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
-    "precommit": "lint-staged",
     "test": "NODE_PATH=./app NODE_ENV=test jest",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2 start pm2.dev.json",
@@ -48,6 +47,7 @@
     "express": "^4.16.4",
     "http-status": "^1.2.0",
     "joi": "^13.4.0",
+    "jsonwebtoken": "^8.5.1",
     "koa-body": "^4.0.4",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",

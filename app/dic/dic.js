@@ -63,9 +63,9 @@ diContainer.register({
   authenticationService: asFunction(createAuthenticationService),
 
   usersRoutes: asFunction(createUsersRoutes),
+  authRoutes: asFunction(createAuthRoutes),
   postsRoutes: asFunction(createPostsRoutes),
   commentsRoutes: asFunction(createCommentsRoutes),
-  authRoutes: asFunction(createAuthRoutes),
 
   usersUrls: asFunction(createUsersUrls),
   authUrls: asFunction(createAuthUrls),
