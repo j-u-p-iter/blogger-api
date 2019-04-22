@@ -84,7 +84,7 @@ describe('authRoutes', () => {
           expect(success).toBe(false);
           expect(error).toBe('Email is required');
         });
-      })
+      });
 
       describe('without password', () => {
         it('returns correct error', async () => {
@@ -106,7 +106,7 @@ describe('authRoutes', () => {
         it('returns correct error', async () => {
           const userToSignIn = {
             email: 'nosuch@email.com',
-            password: 'some@email.com',
+            password: 12345
           };
 
           const url = authUrls.signIn();
@@ -118,6 +118,67 @@ describe('authRoutes', () => {
           expect(error).toBe('No such user');
         });
       });
+
+      describe('with incorrect password', () => {
+        beforeAll(async (done) => {
+          const userToSignUp = {
+            name: 'someName',
+            email: 'some@email.com',
+            password: 1234567,
+          };
+          const signUpUrl = authUrls.signUp();
+
+          await request.post(signUpUrl, userToSignUp); 
+
+          done();
+        });
+
+        it('returns correct error', async () => {
+          const userToSignIn = {
+            email: 'some@email.com',
+            password: 12345, 
+          };
+
+          const url = authUrls.signIn();
+          const { status, body: { error, success } } = await extractResponse(request.post(url, userToSignIn)); 
+
+          expect(success).toBe(false);
+          expect(status).toBe(HTTPStatus.UNAUTHORIZED);
+          expect(error).toBe('Invalid password');
+        });
+      });
+    });
+
+    describe('with correct data', () => {
+      beforeAll(async (done) => {
+        const userToSignUp = {
+          name: 'someName',
+          email: 'some@email.com',
+          password: '1234567',
+        };
+        const signUpUrl = authUrls.signUp();
+
+        await request.post(signUpUrl, userToSignUp); 
+
+        done();
+      });
+
+      it('signs in properly', async () => {
+        const userToSignIn = {
+          email: 'some@email.com',
+          password: '1234567', 
+        };
+
+        const url = authUrls.signIn();
+        const { status, body: { user, accessToken, success, message } } = await extractResponse(request.post(url, userToSignIn)); 
+
+        expect(status).toBe(HTTPStatus.OK);
+        expect(success).toBe(true);
+        expect(message).toBe('Sign In with success');
+        expect(accessToken).toBeDefined();
+        expect(user.email).toBe(userToSignIn.email);
+        expect(user.password).not.toBeDefined();
+      })
     });
   });
 });

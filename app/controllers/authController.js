@@ -74,9 +74,9 @@ export const createAuthController = ({
     [err] = await to(authenticationService.checkPassword(password, user.password));
 
     if (err) {
-      responseWithError({
+      return responseWithError({
         res,
-        err,
+        err: { message: 'Invalid password' },
         status: HTTPStatus.UNAUTHORIZED,
       });
     }
@@ -85,7 +85,7 @@ export const createAuthController = ({
       res,
       data: {
         user: user.toClient(),
-        accessToken: authenticationService.generateToken(),
+        accessToken: authenticationService.generateToken({ userId: user.id, role: user.role }),
       },
       status: HTTPStatus.OK,
       message: 'Sign In with success',
