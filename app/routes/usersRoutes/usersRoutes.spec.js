@@ -160,7 +160,7 @@ describe('usersRoutes', () => {
       let userToCreate;
 
       beforeAll(async () => {
-        userToCreate = {
+       userToCreate = {
           name: 'someName',
           email: 'invalidEmail',
           password: '12345',
@@ -273,10 +273,10 @@ describe('usersRoutes', () => {
     describe('with incorrect id', () => {
       it('returns correct error', async () => {
         const url = usersUrls.delete(5); 
-        const { status, body } = await extractResponse(request.delete(url));
+        const { status, body: { success, error } } = await extractResponse(request.delete(url));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
-        expect(body.success).toBe(false);
+        expect(success).toBe(false);
       });
     });
   });

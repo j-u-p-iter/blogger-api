@@ -13,7 +13,9 @@ const createModel = (modelName, schema) => {
 
   const readAll = () => model.find().enableCache();
 
-  const readOne = (id) => model.findById(id);
+  const readById = (id) => model.findById(id);
+
+  const readOne = (data) => model.findOne(data);
 
   const update = (id, data) => model.findByIdAndUpdate(id, data, { new: true });
 
@@ -24,6 +26,7 @@ const createModel = (modelName, schema) => {
   return {
     readAll,
     readOne,
+    readById,
     create,
     insertMany,
     update,

@@ -51,7 +51,7 @@ export const createUserController = ({
 
   const readOne = async (req, res) => {
     const { userId } = req.params;
-    const [err, user] = await to(userModel.readOne(userId));
+    const [err, user] = await to(userModel.readById(userId));
 
     if (err) {
       return responseWithError({

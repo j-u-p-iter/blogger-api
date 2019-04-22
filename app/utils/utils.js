@@ -28,7 +28,11 @@ export const createUtils = ({
       ...data,
     };
 
-    res.status(status).json(resultData);
+    if (status) {
+      res.status(status);
+    }
+
+    res.json(resultData);
   };
 
   const responseWithError = ({
@@ -40,8 +44,12 @@ export const createUtils = ({
       success: false,
       error: err.message,
     };
+    
+    if (status) {
+      res.status(status);
+    }
 
-    res.status(status).json(resultData)
+    res.json(resultData)
   };
 
   const makeApiUrl = (path) => {
