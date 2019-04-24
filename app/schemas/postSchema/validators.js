@@ -11,8 +11,8 @@ export const titleValidator = [
 
 export const bodyValidator = [
   validate({
-    validator: 'isMinLength',
+    validator: 'isLength',
     arguments: [100], 
     message: 'Body should contain at least {ARGS[0]} characters',
-  });
+  })
 ];

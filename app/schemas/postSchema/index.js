@@ -1,1 +1,1 @@
-export { postSchema } from './postSchema';
+export { createPostSchema } from './postSchema';

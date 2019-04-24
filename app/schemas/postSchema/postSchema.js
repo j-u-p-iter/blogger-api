@@ -24,7 +24,7 @@ export const createPostSchema = () => {
       validate: validators.bodyValidator,
     },
     published: {
-      type: Boolean;
+      type: Boolean,
       default: false,
     },
     author: {
