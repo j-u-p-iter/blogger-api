@@ -1,9 +1,12 @@
-const BASE_PART = 'users'; 
+const BASE_PATH = 'users'; 
+
+const createPath = path => `${BASE_PATH}/${path}`;
+
 
 export const createUsersUrls = ({ utils: { makeApiUrl } }) => ({
   get: () => makeApiUrl(BASE_PART),
   post: () => makeApiUrl(BASE_PART),
-  getOne: id => makeApiUrl(`${BASE_PART}/${id}`),
-  patch: id => makeApiUrl(`${BASE_PART}/${id}`),
-  delete: id => makeApiUrl(`${BASE_PART}/${id}`),
+  getOne: id => makeApiUrl(createPath(id)),
+  patch: id => makeApiUrl(createPath(id)),
+  delete: id => makeApiUrl(createPath(id)),
 });
