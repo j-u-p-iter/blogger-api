@@ -16,6 +16,7 @@ import {
 } from 'models';
 import {
   createUserSchema,
+  createPostSchema,
 } from 'schemas';
 import {
   createUserController,
@@ -73,6 +74,7 @@ diContainer.register({
   database: asFunction(createMongooseDBProvider),
 
   userSchema: asFunction(createUserSchema).singleton(),
+  postSchema: asFunction(createPostSchema).singleton(),
 
   userModel: asFunction(createUserModel),
 

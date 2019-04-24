@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
-import to from 'await-to-js';
 
 import * as validators from './validators';
 
