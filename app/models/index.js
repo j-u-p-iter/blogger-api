@@ -1,1 +1,2 @@
-export { default as createUserModel } from './userModel';
+export { createUserModel } from './userModel';
+export { createPostModel } from './postModel';

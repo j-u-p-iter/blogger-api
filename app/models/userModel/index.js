@@ -1,1 +1,1 @@
-export default from './userModel';
+export { createUserModel } from './userModel';
