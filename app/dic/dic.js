@@ -13,6 +13,7 @@ import createConfigs from 'configs';
 import createHTTPServer from 'httpServer';
 import {
   createUserModel,
+  createPostModel,
 } from 'models';
 import {
   createUserSchema,
@@ -77,6 +78,7 @@ diContainer.register({
   postSchema: asFunction(createPostSchema).singleton(),
 
   userModel: asFunction(createUserModel),
+  postModel: asFunction(createPostModel),
 
   userController: asFunction(createUserController),
   authController: asFunction(createAuthController),
