@@ -22,6 +22,7 @@ import {
 import {
   createUserController,
   createAuthController,
+  createPostController,
 } from 'controllers';
 import createRoutes, {
   createUsersRoutes,
@@ -82,6 +83,7 @@ diContainer.register({
 
   userController: asFunction(createUserController),
   authController: asFunction(createAuthController),
+  postController: asFunction(createPostController),
 
   middlewares: asFunction(createMiddlewares),
 
