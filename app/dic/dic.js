@@ -40,7 +40,7 @@ import {
 
 import createMiddlewares from 'middlewares';
 import { createUtils, setupEnvironment } from 'utils';
-import { createUsersUrls, createAuthUrls } from 'urls';
+import { createUsersUrls, createAuthUrls, createPostsUrls } from 'urls';
 
 
 const app = express();
@@ -72,6 +72,7 @@ diContainer.register({
 
   usersUrls: asFunction(createUsersUrls),
   authUrls: asFunction(createAuthUrls),
+  postsUrls: asFunction(createPostsUrls),
 
   database: asFunction(createMongooseDBProvider),
 

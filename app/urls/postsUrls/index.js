@@ -1,0 +1,1 @@
+export { createPostsUrls } from './postsUrls';
