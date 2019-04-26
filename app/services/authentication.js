@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import to from 'await-to-js';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
 export const createAuthenticationService = ({
   utils: { throwError },
@@ -26,8 +26,8 @@ export const createAuthenticationService = ({
     return sign(userData, AUTH_TOKEN_SECRET);
   };
 
-  const decodeToken = () => {
-    return {};
+  const decodeToken = (accessToken) => {
+    return verify(accessToken, AUTH_TOKEN_SECRET);
   };
 
   return {

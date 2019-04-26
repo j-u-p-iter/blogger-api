@@ -1,5 +1,6 @@
 export const createPostsRoutes = ({
   router,
+  verifyUserMiddleware,
   postController: {
     create,
     readAll,
@@ -8,15 +9,15 @@ export const createPostsRoutes = ({
     deleteOne,
   },
 }) => {
-  router.post('/', create);
+  router.post('/', verifyUserMiddleware, create);
 
-  router.get('/', readAll);
+  router.get('/', verifyUserMiddleware, readAll);
 
-  router.get('/:postId', readOne);
+  router.get('/:postId', verifyUserMiddleware, readOne);
 
-  router.put('/:postId', update);
+  router.put('/:postId', verifyUserMiddleware, update);
 
-  router.delete('/:postId', deleteOne);
+  router.delete('/:postId', verifyUserMiddleware, deleteOne);
 
   return router;
 };

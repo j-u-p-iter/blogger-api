@@ -9,7 +9,28 @@ export const createPostController = ({
     responseWithError,
   },
 }) => {
-  const create = () => {};
+  const create = async (req, res) => {
+    const postData = req.body;
+
+    postData.author = req.user;
+
+    const [err, post] = await to(postModel.create(postData));
+
+    if (err) {
+      return responseWithError({
+        res,
+        err,
+        status: HTTPStatus.BAD_REQUEST,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      data: { post },
+      status: HTTPStatus.CREATED,
+      message: 'Create post with success',
+    });
+  };
 
   const readAll = () => {}; 
 

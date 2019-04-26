@@ -30,7 +30,10 @@ export const createPostSchema = () => {
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: [
+        true,
+        'Author should be assigned to post',
+      ],
     },
   });
 
