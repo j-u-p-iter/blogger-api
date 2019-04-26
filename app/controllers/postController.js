@@ -12,7 +12,7 @@ export const createPostController = ({
   const create = async (req, res) => {
     const postData = req.body;
 
-    postData.author = req.user;
+    postData.author = req.user.id;
 
     const [err, post] = await to(postModel.create(postData));
 

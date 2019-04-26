@@ -40,9 +40,11 @@ describe('postsRoutes', () => {
   describe('post to api/v1/posts', () => {
     describe('for signed in user', () => {
       it('create post properly', async () => {
-        const signUpUrl = authUrls.signUp(); 
-        const userToCreate = { name: 'somename', email: 'some@email.com', password: '12345' };
-        const { body: { accessToken } } = await extractResponse(request.post(signUpUrl, userToCreate));
+        const { userId, accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+        });
 
         const createPostUrl = postsUrls.post();
 
@@ -58,8 +60,7 @@ describe('postsRoutes', () => {
         expect(post.title).toBe(postData.title);
         expect(post.body).toBe(postData.body);
         expect(post.published).toBe(false);
-        expect(post.author.name).toBe(userToCreate.name);
-        expect(post.author.email).toBe(userToCreate.email);
+        expect(post.author).toBe(userId);
       });
     });
 
@@ -112,7 +113,6 @@ describe('postsRoutes', () => {
         }]
 
         await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), accessToken);
-
         await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), accessToken); 
 
         done();
@@ -120,7 +120,7 @@ describe('postsRoutes', () => {
 
       it('returns all posts', async () => {
         const url = postsUrls.get();
-        const { status, body: { posts } } = await extractResponse(request.get(url).set('Authorization', `Bearer ${accessToken}`));
+        const { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken));
 
         expect(posts[0].title).toBe(postsToCreate[0].title);
         expect(posts[0].body).toBe(postsToCreate[0].body);
