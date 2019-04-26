@@ -1,1 +1,2 @@
-export default from './middlewares';
+export { createMiddlewares } from './middlewares';
+export { createVerifyUserMiddleware } from './verifyUserMiddleware';

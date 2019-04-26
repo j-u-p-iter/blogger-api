@@ -1,6 +1,14 @@
 import bodyParser from 'body-parser';
 
-const createMiddlewares = () => [bodyParser.json()];
+import { createCurrentUserMiddleware } from './currentUserMiddleware'; 
 
-
-export default createMiddlewares;
+export const createMiddlewares = ({
+  userModel,
+  authenticationService,
+}) => [
+  bodyParser.json(),
+  createCurrentUserMiddleware({
+    userModel,
+    authenticationService,
+  }),
+];

@@ -38,7 +38,11 @@ import {
   createAuthenticationService,
 } from 'services';
 
-import createMiddlewares from 'middlewares';
+import { 
+  createMiddlewares, 
+  createVerifyUserMiddleware,
+} from 'middlewares';
+
 import { createUtils, setupEnvironment } from 'utils';
 import { createUsersUrls, createAuthUrls, createPostsUrls } from 'urls';
 
@@ -87,6 +91,7 @@ diContainer.register({
   postController: asFunction(createPostController),
 
   middlewares: asFunction(createMiddlewares),
+  verifyUserMiddleware: asFunction(createVerifyUserMiddleware),
 
   utils: asFunction(createUtils),
 
