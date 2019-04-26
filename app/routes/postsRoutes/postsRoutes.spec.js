@@ -4,19 +4,6 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../../';
 
-const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-const getRandomLetter = () => letters[Math.floor(Math.random() * letters.length)];
-
-const generateString = (length) => {
-  let resultString = getRandomLetter();
-
-  while(resultString.length !== length) {
-    resultString = resultString + getRandomLetter();
-  }
-
-  return resultString;
-};
-
 describe('postsRoutes', () => {
   let postModel;
   let userModel;
@@ -93,7 +80,7 @@ describe('postsRoutes', () => {
         const url = postsUrls.get();
         const { status, body: { success, error } } = await extractResponse(request.get(url));
 
-        expect(status).toBe(HTTPStatus.FORBIDDEN)
+        expect(status).toBe(HTTPStatus.FORBIDDEN);
         expect(success).toBe(false);
         expect(error).toBe('Accessable only for authenticated users');
       });
