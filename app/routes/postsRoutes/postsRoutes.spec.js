@@ -4,6 +4,18 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../../';
 
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const getRandomLetter = () => letters[Math.floor(Math.random() * letters.length)];
+
+const generateString = (length) => {
+  let resultString = getRandomLetter();
+
+  while(resultString.length !== length) {
+    resultString = resultString + getRandomLetter();
+  }
+
+  return resultString;
+};
 
 describe('postsRoutes', () => {
   let postModel;
@@ -45,7 +57,10 @@ describe('postsRoutes', () => {
 
         const createPostUrl = postsUrls.post();
 
-        const postData = { title: 'Some title', body: 'Some body sdfsdjf lsjdfl;sjdfl;s jdlfjs dlf jsadlfj sl;dfjsal dfjasldf jasldfjasdlfjladsfjlsdjf ldsfj lsdjfl sdjfl;asjdfl;' };
+        const postData = { 
+          title: generateString(10), 
+          body: generateString(180), 
+        };
         const requestToCreatePost = request.post(createPostUrl, postData).set('Authorization', `Bearer ${accessToken}`); 
 
         const { status, body: { post, success } } = await extractResponse(requestToCreatePost);
