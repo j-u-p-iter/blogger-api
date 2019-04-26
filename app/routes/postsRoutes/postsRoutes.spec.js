@@ -4,7 +4,7 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../../';
 
-import { generateString } from '../../utils/testsUtils';
+import { generateString, signUpUser } from '../../utils/testsUtils';
 
 describe('postsRoutes', () => {
   let postModel;
@@ -95,11 +95,11 @@ describe('postsRoutes', () => {
       let userId;
 
       beforeAll(async (done) => {
-        const signUpUrl = authUrls.signUp(); 
-
-        userToCreate = { name: 'somename', email: 'some@email.com', password: '12345' };
-
-        ({ body: { user: { id: userId }, accessToken } } = await extractResponse(request.post(signUpUrl, userToCreate)));
+        ({ userId, accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+        }));
 
         const createPostUrl = postsUrls.post(); 
 
