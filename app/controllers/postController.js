@@ -32,7 +32,23 @@ export const createPostController = ({
     });
   };
 
-  const readAll = () => {}; 
+  const readAll = async (req, res) => {
+    const [err, posts] = await to(postModel.readAll());  
+
+    if (err) {
+      return responseWithError({
+        res,
+        err,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      data: { posts },
+      status: HTTPStatus.OK,
+      message: 'Retrieve posts with success',
+    });
+  }; 
 
   const readOne = () => {};
 

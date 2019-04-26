@@ -4,6 +4,8 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../../';
 
+import { generateString } from '../../utils/testsUtils';
+
 describe('postsRoutes', () => {
   let postModel;
   let userModel;
@@ -87,11 +89,48 @@ describe('postsRoutes', () => {
     });
 
     describe('for signed in users', () => {
+      let postsToCreate;
+      let accessToken;
+      let userToCreate;
+      let userId;
+
+      beforeAll(async (done) => {
+        const signUpUrl = authUrls.signUp(); 
+
+        userToCreate = { name: 'somename', email: 'some@email.com', password: '12345' };
+
+        ({ body: { user: { id: userId }, accessToken } } = await extractResponse(request.post(signUpUrl, userToCreate)));
+
+        const createPostUrl = postsUrls.post(); 
+
+        postsToCreate = [{
+          title: generateString(12),
+          body: generateString(190),
+        }, {
+          title: generateString(20),
+          body: generateString(250),
+        }]
+
+        await request.post(createPostUrl, postsToCreate[0]).set('Authorization', `Bearer ${accessToken}`); 
+
+        await request.post(createPostUrl, postsToCreate[1]).set('Authorization', `Bearer ${accessToken}`); 
+
+        done();
+      });
+
       it('returns all posts', async () => {
         const url = postsUrls.get();
-        const { status, body } = await extractResponse(request.get(url));
+        const { status, body: { posts } } = await extractResponse(request.get(url).set('Authorization', `Bearer ${accessToken}`));
 
-        expect(true).toBe(true);
+        expect(posts[0].title).toBe(postsToCreate[0].title);
+        expect(posts[0].body).toBe(postsToCreate[0].body);
+        expect(posts[0].published).toBe(false);
+        expect(posts[0].author).toBe(userId);
+
+        expect(posts[1].title).toBe(postsToCreate[1].title);
+        expect(posts[1].body).toBe(postsToCreate[1].body);
+        expect(posts[1].published).toBe(false);
+        expect(posts[1].author).toBe(userId);
       });
     })
   });
