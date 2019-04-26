@@ -4,7 +4,7 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../../';
 
-import { generateString, signUpUser } from '../../utils/testsUtils';
+import { generateString, signUpUser, sendRequestWithToken } from '../../utils/testsUtils';
 
 describe('postsRoutes', () => {
   let postModel;
@@ -111,9 +111,9 @@ describe('postsRoutes', () => {
           body: generateString(250),
         }]
 
-        await request.post(createPostUrl, postsToCreate[0]).set('Authorization', `Bearer ${accessToken}`); 
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), accessToken);
 
-        await request.post(createPostUrl, postsToCreate[1]).set('Authorization', `Bearer ${accessToken}`); 
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), accessToken); 
 
         done();
       });

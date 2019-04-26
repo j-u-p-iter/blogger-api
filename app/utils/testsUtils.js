@@ -19,3 +19,7 @@ export const signUpUser = async ({ url, user, extractResponse }) => {
 
   return { userId, accessToken };
 };
+
+export const sendRequestWithToken = (requestObject, accessToken) => {
+  return requestObject.set('Authorization', `Bearer ${accessToken}`); 
+}
