@@ -33,7 +33,9 @@ export const createPostController = ({
   };
 
   const readAll = async (req, res) => {
-    const [err, posts] = await to(postModel.readAll());  
+    const { id: userId } = req.user;
+
+    const [err, posts] = await to(postModel.readAllBy({ author: userId }));  
 
     if (err) {
       return responseWithError({
@@ -50,7 +52,7 @@ export const createPostController = ({
     });
   }; 
 
-  const readOne = () => {};
+  const readOne = async (req, res) => {};
 
   const update = () => {};
 

@@ -91,15 +91,26 @@ describe('postsRoutes', () => {
 
     describe('for signed in users', () => {
       let postsToCreate;
-      let accessToken;
+
+      let firstAccessToken;
+      let secondAccessToken;
+
+      let firstUserId;
+      let secondUserId;
+
       let userToCreate;
-      let userId;
 
       beforeAll(async (done) => {
-        ({ userId, accessToken } = await signUpUser({ 
+        ({ userId: firstUserId, accessToken: firstAccessToken } = await signUpUser({ 
           extractResponse,
           url: authUrls.signUp(), 
           user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+        }));
+
+        ({ userId: secondUserId, accessToken: secondAccessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'onemorename', email: 'onemore@email.com', password: '12345' } 
         }));
 
         const createPostUrl = postsUrls.post(); 
@@ -110,27 +121,43 @@ describe('postsRoutes', () => {
         }, {
           title: generateString(20),
           body: generateString(250),
+        }, {
+          title: generateString(25),
+          body: generateString(200),
         }]
 
-        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), accessToken);
-        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), accessToken); 
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), firstAccessToken);
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), firstAccessToken);
+
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[2]), secondAccessToken); 
 
         done();
       });
 
       it('returns all posts', async () => {
         const url = postsUrls.get();
-        const { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken));
+        let { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), firstAccessToken));
+
+        expect(posts.length).toBe(2);
 
         expect(posts[0].title).toBe(postsToCreate[0].title);
         expect(posts[0].body).toBe(postsToCreate[0].body);
         expect(posts[0].published).toBe(false);
-        expect(posts[0].author).toBe(userId);
+        expect(posts[0].author).toBe(firstUserId);
 
         expect(posts[1].title).toBe(postsToCreate[1].title);
         expect(posts[1].body).toBe(postsToCreate[1].body);
         expect(posts[1].published).toBe(false);
-        expect(posts[1].author).toBe(userId);
+        expect(posts[1].author).toBe(firstUserId);
+
+        ({ status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), secondAccessToken)));
+
+        expect(posts.length).toBe(1);
+
+        expect(posts[0].title).toBe(postsToCreate[2].title);
+        expect(posts[0].body).toBe(postsToCreate[2].body);
+        expect(posts[0].published).toBe(false);
+        expect(posts[0].author).toBe(secondUserId);
       });
     })
   });
