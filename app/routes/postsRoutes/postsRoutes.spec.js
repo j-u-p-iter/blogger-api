@@ -138,26 +138,32 @@ describe('postsRoutes', () => {
         const url = postsUrls.get();
         let { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), firstAccessToken));
 
+        expect(status).toBe(HTTPStatus.OK);
         expect(posts.length).toBe(2);
 
-        expect(posts[0].title).toBe(postsToCreate[0].title);
-        expect(posts[0].body).toBe(postsToCreate[0].body);
-        expect(posts[0].published).toBe(false);
-        expect(posts[0].author).toBe(firstUserId);
+        const [firstPost, secondPost] = posts; 
 
-        expect(posts[1].title).toBe(postsToCreate[1].title);
-        expect(posts[1].body).toBe(postsToCreate[1].body);
-        expect(posts[1].published).toBe(false);
-        expect(posts[1].author).toBe(firstUserId);
+        expect(firstPost.title).toBe(postsToCreate[0].title);
+        expect(firstPost.body).toBe(postsToCreate[0].body);
+        expect(firstPost.published).toBe(false);
+        expect(firstPost.author).toBe(firstUserId);
+
+        expect(secondPost.title).toBe(postsToCreate[1].title);
+        expect(secondPost.body).toBe(postsToCreate[1].body);
+        expect(secondPost.published).toBe(false);
+        expect(secondPost.author).toBe(firstUserId);
 
         ({ status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), secondAccessToken)));
 
+        const [thirdPost] = posts;
+
+        expect(status).toBe(HTTPStatus.OK);
         expect(posts.length).toBe(1);
 
-        expect(posts[0].title).toBe(postsToCreate[2].title);
-        expect(posts[0].body).toBe(postsToCreate[2].body);
-        expect(posts[0].published).toBe(false);
-        expect(posts[0].author).toBe(secondUserId);
+        expect(thirdPost.title).toBe(postsToCreate[2].title);
+        expect(thirdPost.body).toBe(postsToCreate[2].body);
+        expect(thirdPost.published).toBe(false);
+        expect(thirdPost.author).toBe(secondUserId);
       });
     })
   });
