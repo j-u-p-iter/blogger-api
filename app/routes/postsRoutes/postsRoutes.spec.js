@@ -167,8 +167,8 @@ describe('postsRoutes', () => {
         };
 
         const createPostUrl = postsUrls.post(); 
-        ({ body: { post: { _id: firstPostId } } } = await sendRequestWithToken(request.post(createPostUrl, firstPostToCreate), accessToken));
-        ({ body: { post: { _id: secondPostId } } } = await sendRequestWithToken(request.post(createPostUrl, secondPostToCreate), accessToken));
+        ({ body: { post: { id: firstPostId } } } = await sendRequestWithToken(request.post(createPostUrl, firstPostToCreate), accessToken));
+        ({ body: { post: { id: secondPostId } } } = await sendRequestWithToken(request.post(createPostUrl, secondPostToCreate), accessToken));
 
         done();
       });

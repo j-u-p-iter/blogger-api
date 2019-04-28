@@ -26,7 +26,7 @@ export const createPostController = ({
 
     return responseWithSuccess({
       res,
-      data: { post },
+      data: { post: post.toClient() },
       status: HTTPStatus.CREATED,
       message: 'Create post with success',
     });
@@ -44,7 +44,7 @@ export const createPostController = ({
 
     return responseWithSuccess({
       res,
-      data: { posts },
+      data: { posts: posts.map(post => post.toClient()) },
       status: HTTPStatus.OK,
       message: 'Retrieve posts with success',
     });
@@ -53,7 +53,7 @@ export const createPostController = ({
   const readOne = async (req, res) => {
     const { params: { postId } } = req;
     
-    const [err, post] = await to(postModel.readOne({ _id: postId }))
+    const [err, post] = await to(postModel.readById(postId))
 
     if (err) {
       return responseWithError({
@@ -65,13 +65,31 @@ export const createPostController = ({
 
     return responseWithSuccess({
       res,
-      data: { post },
+      data: { post: post.toClient() },
       status: HTTPStatus.OK,
       message: 'Retrieve post with success',
     });
   };
 
-  const update = () => {};
+  const update = async (req, res) => {
+    const { body: postData, params: { postId } } = req;
+
+    const [err, post] = await to(postModel.update(postId, postData));
+
+    if (err) {
+      return responseWithError({
+        res,
+        err,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      data: { post: post.toClient() },
+      status: HTTPStatus.OK, 
+      message: 'Update post with success',
+    });
+  };
 
   const deleteOne = () => {};
 
