@@ -33,8 +33,6 @@ export const createPostController = ({
   };
 
   const readAll = async (req, res) => {
-    const { id: userId } = req.user;
-
     const [err, posts] = await to(postModel.readAll());  
 
     if (err) {

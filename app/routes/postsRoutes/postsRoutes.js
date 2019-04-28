@@ -11,9 +11,9 @@ export const createPostsRoutes = ({
 }) => {
   router.post('/', verifyUserMiddleware, create);
 
-  router.get('/', verifyUserMiddleware, readAll);
+  router.get('/', readAll);
 
-  router.get('/:postId', verifyUserMiddleware, readOne);
+  router.get('/:postId', readOne);
 
   router.put('/:postId', verifyUserMiddleware, update);
 
