@@ -128,18 +128,20 @@ describe('postsRoutes', () => {
   });
 
   describe('get to api/v1/posts/:postId', () => {
-    it('returns correct error', async () => {
-      const postId = 12345;
-      const url = postsUrls.getOne(postId);
+    describe('when try to retrieve post, that is absent in DB', () => {
+      it('returns correct error', async () => {
+        const postId = 12345;
+        const url = postsUrls.getOne(postId);
 
-      const { status, body: { success, error } } = await extractResponse(request.get(url));
+        const { status, body: { success, error } } = await extractResponse(request.get(url));
 
-      expect(status).toBe(HTTPStatus.NOT_FOUND);
-      expect(success).toBe(false);
-      expect(error).toBe(`No post with id ${postId}`);
+        expect(status).toBe(HTTPStatus.NOT_FOUND);
+        expect(success).toBe(false);
+        expect(error).toBe(`No post with id ${postId}`);
+      });
     });
 
-    describe('when user is signed in', () => {
+    describe('when try to retrieve post, that presents in DB', () => {
       let accessToken;
       let userId;
       let firstPostId;
