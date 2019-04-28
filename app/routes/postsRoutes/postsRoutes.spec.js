@@ -192,4 +192,48 @@ describe('postsRoutes', () => {
       });
     });
   });
+
+  describe('put to api/v1/posts/:postId', () => {
+    describe('when user is not signed in', () => {
+      it('returns correct error', async () => {
+        const url = postsUrls.put(12345);
+        const postData = { 
+          title: generateString(20), 
+          body: generateString(250),
+        };
+        const { status, body: { success, error } } = await extractResponse(request.put(url, postData));
+
+        expect(status).toBe(HTTPStatus.FORBIDDEN)
+        expect(success).toBe(false);
+        expect(error).toBe('Accessable only for authenticated users');
+      });
+    });
+
+    describe('when user is signed in', () => {
+      let accessToken;
+
+      beforeAll(async (done) => {
+        ({ accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+        }));
+
+        done();
+      });
+
+      describe('when try to update post, that is absent in DB', () => {
+        it('returns correct error', async () => {
+          const postId = 12345;
+          const url = postsUrls.put(postId);
+
+          const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.put(url), accessToken));
+
+          expect(status).toBe(HTTPStatus.NOT_FOUND);
+          expect(success).toBe(false);
+          expect(error).toBe(`No post with id ${postId}`);
+        });
+      });
+    });
+  });
 });

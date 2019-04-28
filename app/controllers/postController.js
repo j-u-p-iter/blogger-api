@@ -74,12 +74,23 @@ export const createPostController = ({
   const update = async (req, res) => {
     const { body: postData, params: { postId } } = req;
 
-    const [err, post] = await to(postModel.update(postId, postData));
+    const [readError] = await to(postModel.readById(postId))
 
-    if (err) {
+    if (readError) {
+      return responseWithError({
+        res,
+        err: { message: `No post with id ${postId}` },
+        status: HTTPStatus.NOT_FOUND,
+      });
+    }
+
+    const [updateError, post] = await to(postModel.update(postId, postData));
+
+    if (updateError) {
       return responseWithError({
         res,
         err,
+        status: HTTPStatus.BAD_REQUEST,
       });
     }
 
