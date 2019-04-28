@@ -91,26 +91,15 @@ describe('postsRoutes', () => {
 
     describe('for signed in users', () => {
       let postsToCreate;
-
-      let firstAccessToken;
-      let secondAccessToken;
-
-      let firstUserId;
-      let secondUserId;
-
+      let accessToken;
+      let userId;
       let userToCreate;
 
       beforeAll(async (done) => {
-        ({ userId: firstUserId, accessToken: firstAccessToken } = await signUpUser({ 
+        ({ userId, accessToken } = await signUpUser({ 
           extractResponse,
           url: authUrls.signUp(), 
           user: { name: 'somename', email: 'some@email.com', password: '12345' } 
-        }));
-
-        ({ userId: secondUserId, accessToken: secondAccessToken } = await signUpUser({ 
-          extractResponse,
-          url: authUrls.signUp(), 
-          user: { name: 'onemorename', email: 'onemore@email.com', password: '12345' } 
         }));
 
         const createPostUrl = postsUrls.post(); 
@@ -121,22 +110,17 @@ describe('postsRoutes', () => {
         }, {
           title: generateString(20),
           body: generateString(250),
-        }, {
-          title: generateString(25),
-          body: generateString(200),
-        }]
+        }];
 
-        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), firstAccessToken);
-        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), firstAccessToken);
-
-        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[2]), secondAccessToken); 
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[0]), accessToken);
+        await sendRequestWithToken(request.post(createPostUrl, postsToCreate[1]), accessToken);
 
         done();
       });
 
       it('returns all posts', async () => {
         const url = postsUrls.get();
-        let { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), firstAccessToken));
+        let { status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken));
 
         expect(status).toBe(HTTPStatus.OK);
         expect(posts.length).toBe(2);
@@ -146,25 +130,102 @@ describe('postsRoutes', () => {
         expect(firstPost.title).toBe(postsToCreate[0].title);
         expect(firstPost.body).toBe(postsToCreate[0].body);
         expect(firstPost.published).toBe(false);
-        expect(firstPost.author).toBe(firstUserId);
+        expect(firstPost.author).toBe(userId);
 
         expect(secondPost.title).toBe(postsToCreate[1].title);
         expect(secondPost.body).toBe(postsToCreate[1].body);
         expect(secondPost.published).toBe(false);
-        expect(secondPost.author).toBe(firstUserId);
-
-        ({ status, body: { posts } } = await extractResponse(sendRequestWithToken(request.get(url), secondAccessToken)));
-
-        const [thirdPost] = posts;
-
-        expect(status).toBe(HTTPStatus.OK);
-        expect(posts.length).toBe(1);
-
-        expect(thirdPost.title).toBe(postsToCreate[2].title);
-        expect(thirdPost.body).toBe(postsToCreate[2].body);
-        expect(thirdPost.published).toBe(false);
-        expect(thirdPost.author).toBe(secondUserId);
+        expect(secondPost.author).toBe(userId);
       });
     })
+  });
+
+  describe('get to api/v1/posts/:postId', () => {
+    describe('when user is not signed in', () => {
+      it('returns correct error', async () => {
+        const url = postsUrls.getOne();
+        const { status, body: { success, error } } = await extractResponse(request.get(url));
+
+        expect(status).toBe(HTTPStatus.FORBIDDEN);
+        expect(success).toBe(false);
+        expect(error).toBe('Accessable only for authenticated users');
+      });
+    });
+
+    describe('when no post with such id', () => {
+      let accessToken;
+
+      beforeAll(async (done) => {
+        ({ accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'somename', email: 'some@email.com', password: '12345' },
+        }));
+
+        done();
+      });
+
+      it('returns correct error', async () => {
+        const postId = 12345;
+        const url = postsUrls.getOne(postId);
+
+        const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken));
+
+        expect(status).toBe(HTTPStatus.NOT_FOUND);
+        expect(success).toBe(false);
+        expect(error).toBe(`No post with id ${postId}`);
+      });
+    });
+
+    describe('when user is signed in', () => {
+      let accessToken;
+      let userId;
+      let firstPostId;
+      let secondPostId;
+      let firstPostToCreate;
+      let secondPostToCreate;
+
+      beforeAll(async (done) => {
+        ({ userId, accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+        }));
+
+        firstPostToCreate = {
+          title: generateString(12),
+          body: generateString(190),
+        };
+
+        secondPostToCreate = {
+          title: generateString(25),
+          body: generateString(210),
+        };
+
+        const createPostUrl = postsUrls.post(); 
+        ({ body: { post: { _id: firstPostId } } } = await sendRequestWithToken(request.post(createPostUrl, firstPostToCreate), accessToken));
+        ({ body: { post: { _id: secondPostId } } } = await sendRequestWithToken(request.post(createPostUrl, secondPostToCreate), accessToken));
+
+        done();
+      });
+
+      it('returns correct post', async () => {
+        let url = postsUrls.getOne(firstPostId);
+        let { status, body: { success, post } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken));
+
+        expect(status).toBe(HTTPStatus.OK);
+        expect(success).toBe(true);
+        expect(post.title).toBe(firstPostToCreate.title);
+        expect(post.body).toBe(firstPostToCreate.body);
+
+        url = postsUrls.getOne(secondPostId);
+        ({ status, body: { success, post } } = await extractResponse(sendRequestWithToken(request.get(url), accessToken)));
+
+        expect(status).toBe(HTTPStatus.OK);
+        expect(success).toBe(true);
+        expect(post.title).toBe(secondPostToCreate.title);
+        expect(post.body).toBe(secondPostToCreate.body);
+      });
+    });
   });
 });

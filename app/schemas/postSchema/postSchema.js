@@ -37,5 +37,15 @@ export const createPostSchema = () => {
     },
   });
 
+  postSchema.methods.toClient = function() {
+    const post = this.toJSON();
+
+    post.id = post._id;
+
+    delete post._id;
+
+    return post;
+  };
+
   return postSchema;
 };

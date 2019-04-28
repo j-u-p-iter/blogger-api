@@ -35,7 +35,7 @@ export const createPostController = ({
   const readAll = async (req, res) => {
     const { id: userId } = req.user;
 
-    const [err, posts] = await to(postModel.readAllBy({ author: userId }));  
+    const [err, posts] = await to(postModel.readAll());  
 
     if (err) {
       return responseWithError({
@@ -52,7 +52,26 @@ export const createPostController = ({
     });
   }; 
 
-  const readOne = async (req, res) => {};
+  const readOne = async (req, res) => {
+    const { params: { postId } } = req;
+    
+    const [err, post] = await to(postModel.readOne({ _id: postId }))
+
+    if (err) {
+      return responseWithError({
+        res,
+        err: { message: `No post with id ${postId}` },
+        status: HTTPStatus.NOT_FOUND,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      data: { post },
+      status: HTTPStatus.OK,
+      message: 'Retrieve post with success',
+    });
+  };
 
   const update = () => {};
 
