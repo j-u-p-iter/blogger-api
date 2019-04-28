@@ -210,19 +210,19 @@ describe('postsRoutes', () => {
     });
 
     describe('when user is signed in', () => {
-      let accessToken;
-
-      beforeAll(async (done) => {
-        ({ accessToken } = await signUpUser({ 
-          extractResponse,
-          url: authUrls.signUp(), 
-          user: { name: 'somename', email: 'some@email.com', password: '12345' } 
-        }));
-
-        done();
-      });
-
       describe('when try to update post, that is absent in DB', () => {
+        let accessToken;
+
+        beforeAll(async (done) => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+          }));
+
+          done();
+        });
+
         it('returns correct error', async () => {
           const postId = 12345;
           const url = postsUrls.put(postId);
@@ -232,6 +232,47 @@ describe('postsRoutes', () => {
           expect(status).toBe(HTTPStatus.NOT_FOUND);
           expect(success).toBe(false);
           expect(error).toBe(`No post with id ${postId}`);
+        });
+      });
+
+      describe('when update post, that presents in DB', () => {
+        let postId;
+        let accessToken;
+        let postToCreate;
+
+        beforeAll(async (done) => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+          }));
+
+          const createPostUrl = postsUrls.post(); 
+
+          postToCreate = {
+            title: generateString(20),
+            body: generateString(270),
+          };
+
+          ({ body: { post: { id: postId } } } = await sendRequestWithToken(request.post(createPostUrl, postToCreate), accessToken));
+
+          done();
+        });
+
+        it('updates post properly', async () => {
+          const dataToUpdate = {
+            title: generateString(25),
+            published: true,
+          };
+
+          const url = postsUrls.put(postId);
+
+          const { status, body: { success, post } } = await extractResponse(sendRequestWithToken(request.put(url, dataToUpdate), accessToken));
+
+          expect(success).toBe(true);
+          expect(post.title).toBe(dataToUpdate.title);
+          expect(post.body).toBe(postToCreate.body);
+          expect(post.published).toBe(true);
         });
       });
     });
