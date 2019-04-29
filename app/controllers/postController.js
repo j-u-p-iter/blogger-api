@@ -102,7 +102,34 @@ export const createPostController = ({
     });
   };
 
-  const deleteOne = () => {};
+  const deleteOne = async (req, res) => {
+    const { params: { postId } } = req;
+
+    const [readError] = await to(postModel.readById(postId))
+
+    if (readError) {
+      return responseWithError({
+        res,
+        err: { message: `No post with id ${postId}` },
+        status: HTTPStatus.NOT_FOUND,
+      });
+    }
+
+    const [deleteError] = await to(postModel.deleteOne(postId));
+
+    if (deleteError) {
+      return responseWithError({
+        res,
+        err,
+      });
+    }
+
+    return responseWithSuccess({
+      res,
+      status: HTTPStatus.OK,
+      message: 'Post deleted with success',
+    });
+  };
 
   return {
     create,

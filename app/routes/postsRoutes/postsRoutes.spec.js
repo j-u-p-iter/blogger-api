@@ -277,4 +277,78 @@ describe('postsRoutes', () => {
       });
     });
   });
+
+  describe('delete to api/v1/posts/:postId', () => {
+    describe('when user is not signed in', () => {
+      it('returns correct error', async () => {
+        const url = postsUrls.delete(12345);
+        const { status, body: { success, error } } = await extractResponse(request.delete(url));
+
+        expect(status).toBe(HTTPStatus.FORBIDDEN)
+        expect(success).toBe(false);
+        expect(error).toBe('Accessable only for authenticated users');
+      });
+    });
+
+    describe('when user is signed in', () => {
+      describe('when tries to delete post, that is absent in DB', () => {
+        let accessToken;
+
+        beforeAll(async (done) => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+          }));
+
+          done();
+        });
+
+        it('returns correct error', async () => {
+          const postId = 12345;
+          const url = postsUrls.delete(postId);
+
+          const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.delete(url), accessToken));
+
+          expect(status).toBe(HTTPStatus.NOT_FOUND);
+          expect(success).toBe(false);
+          expect(error).toBe(`No post with id ${postId}`);
+        });
+      });
+
+      describe('when deletes post, that presents in DB', () => {
+        let accessToken;
+        let postId;
+
+        beforeAll(async (done) => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { name: 'somename', email: 'some@email.com', password: '12345' } 
+          }));
+
+          const createPostUrl = postsUrls.post(); 
+
+          const postToCreate = {
+            title: generateString(20),
+            body: generateString(270),
+          };
+
+          ({ body: { post: { id: postId } } } = await sendRequestWithToken(request.post(createPostUrl, postToCreate), accessToken));
+
+          done();
+        });
+
+        it('deletes post properly', async () => {
+          const url = postsUrls.delete(postId);
+
+          const { status, body: { success, message } } = await sendRequestWithToken(request.delete(url), accessToken);
+
+          expect(status).toBe(HTTPStatus.OK);
+          expect(success).toBe(true);
+          expect(message).toBe('Post deleted with success');
+        });
+      })
+    });
+  });
 });

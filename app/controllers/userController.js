@@ -92,7 +92,7 @@ export const createUserController = ({
   };
 
   const deleteOne = async (req, res) => {
-    const { userId } = req.params;
+    const { params: { userId } } = req;
 
     const [err] = await to(userModel.deleteOne(userId));
 
