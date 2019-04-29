@@ -316,6 +316,51 @@ describe('postsRoutes', () => {
         });
       });
 
+      describe('when tries to delete not his own post', () => {
+        let firstUserAccessToken;
+        let secondUserAccessToken;
+        let postId;
+
+        beforeAll(async (done) => {
+          const firstUserToCreate = { name: 'firstUserName', email: 'first@email.com', password: '12345' };
+
+          ({ accessToken: firstUserAccessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: firstUserToCreate,
+          }));
+          
+          const secondUserToCreate = { name: 'secondUserName', email: 'second@email.com', password: '12345' };
+
+          ({ accessToken: secondUserAccessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: secondUserToCreate,
+          }));
+
+          const createPostUrl = postsUrls.post(); 
+
+          const postToCreate = {
+            title: generateString(20),
+            body: generateString(270),
+          };
+
+          ({ body: { post: { id: postId } } } = await extractResponse(sendRequestWithToken(request.post(createPostUrl, postToCreate), firstUserAccessToken)));
+
+          done();
+        });
+
+        it('returns correct error', async () => {
+          const url = postsUrls.delete(postId);
+
+          const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.delete(url), secondUserAccessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Post can be deleted only by author');
+        });
+      })
+
       describe('when deletes post, that presents in DB', () => {
         let accessToken;
         let postId;
@@ -334,7 +379,7 @@ describe('postsRoutes', () => {
             body: generateString(270),
           };
 
-          ({ body: { post: { id: postId } } } = await sendRequestWithToken(request.post(createPostUrl, postToCreate), accessToken));
+          ({ body: { post: { id: postId } } } = await extractResponse(sendRequestWithToken(request.post(createPostUrl, postToCreate), accessToken)));
 
           done();
         });
@@ -342,7 +387,7 @@ describe('postsRoutes', () => {
         it('deletes post properly', async () => {
           const url = postsUrls.delete(postId);
 
-          const { status, body: { success, message } } = await sendRequestWithToken(request.delete(url), accessToken);
+          const { status, body: { success, message } } = await extractResponse(sendRequestWithToken(request.delete(url), accessToken));
 
           expect(status).toBe(HTTPStatus.OK);
           expect(success).toBe(true);

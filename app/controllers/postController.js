@@ -11,8 +11,9 @@ export const createPostController = ({
 }) => {
   const create = async (req, res) => {
     const postData = req.body;
+    const { user: { id: userId } } = req;
 
-    postData.author = req.user.id;
+    postData.author = userId;
 
     const [err, post] = await to(postModel.create(postData));
 
@@ -74,7 +75,9 @@ export const createPostController = ({
   const update = async (req, res) => {
     const { body: postData, params: { postId } } = req;
 
-    const [readError] = await to(postModel.readById(postId))
+    const [readError, postToCheck] = await to(postModel.readById(postId))
+
+    // need to check, that postToCheck author field value is equal to req.user.id
 
     if (readError) {
       return responseWithError({
@@ -103,15 +106,30 @@ export const createPostController = ({
   };
 
   const deleteOne = async (req, res) => {
-    const { params: { postId } } = req;
+    const { 
+      user: { 
+        id: userId, 
+      }, 
+      params: { 
+        postId, 
+      } 
+    } = req;
 
-    const [readError] = await to(postModel.readById(postId))
+    const [readError, postToCheck] = await to(postModel.readById(postId));
 
     if (readError) {
       return responseWithError({
         res,
         err: { message: `No post with id ${postId}` },
         status: HTTPStatus.NOT_FOUND,
+      });
+    }
+
+    if (String(userId) !== String(postToCheck.author)) {
+      return responseWithError({
+        res,
+        err: { message: 'Post can be deleted only by author' },
+        status: HTTPStatus.FORBIDDEN,
       });
     }
 
