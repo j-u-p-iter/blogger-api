@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
 
-const createMongooseDBProvider = ({
+export const createMongooseDBProvider = ({
   configs: { DB_PORT, DB_HOST, DB_NAME },
 }) => {
   let dbConnection;
 
-  const connect = (callback) => {
-    dbConnection = mongoose.connect(
+  const connect = async (callback) => {
+    dbConnection = await mongoose.connect(
       `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`,
       { useNewUrlParser: true },
       callback,
@@ -16,10 +16,7 @@ const createMongooseDBProvider = ({
     return dbConnection;
   };
 
-  const close = () => dbConnection.close();
+  const close = () => mongoose.connection.close();
 
   return { connect, close };
 };
-
-
-export default createMongooseDBProvider;

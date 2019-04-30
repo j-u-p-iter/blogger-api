@@ -32,6 +32,7 @@ import createRoutes, {
 } from 'routes';
 import {
   createMongooseDBProvider,
+  createRedisDBProvider,
 } from 'dbProviders';
 import {
   createCacheService,
@@ -56,7 +57,7 @@ diContainer.register({
 
   app: asValue(app),
 
-  httpServer: asFunction(createHTTPServer),
+  httpServer: asFunction(createHTTPServer).singleton(),
 
   // it should work like asClass(Router)
   // but does not work
@@ -78,7 +79,8 @@ diContainer.register({
   authUrls: asFunction(createAuthUrls),
   postsUrls: asFunction(createPostsUrls),
 
-  database: asFunction(createMongooseDBProvider),
+  database: asFunction(createMongooseDBProvider).singleton(),
+  redisProvider: asFunction(createRedisDBProvider).singleton(),
 
   userSchema: asFunction(createUserSchema).singleton(),
   postSchema: asFunction(createPostSchema).singleton(),

@@ -2,12 +2,13 @@ import mongoose from 'mongoose';
 import redis from 'redis';
 import * as util from 'util';
 
-const client = redis.createClient();
-
-const getFromRedis = util.promisify(client.get).bind(client);
 const originalExec = mongoose.Query.prototype.exec;
 
-export const createCacheService = () => {
+export const createCacheService = ({
+  redisProvider
+}) => {
+  const { client } = redisProvider;
+
   const self = mongoose.Query.prototype;
 
   self.useCache = null;

@@ -1,1 +1,2 @@
-export { default as createMongooseDBProvider } from './mongooseDBProvider';
+export { createMongooseDBProvider } from './mongooseDBProvider';
+export { createRedisDBProvider } from './redisDBProvider';

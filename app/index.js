@@ -14,7 +14,10 @@ export const runApp = (onSuccessRun = () => {}) => {
 
   
 
-  dic.resolve('database').connect()
+  Promise.all([
+    dic.resolve('database').connect(),
+    dic.resolve('redisProvider').create(),
+  ])
     .then(() => {
       dic.resolve('cacheService');
 
