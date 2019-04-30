@@ -5,7 +5,7 @@ export const createAuthConfig = (environmentObject) => {
   const envVarsSchema = Joi.object().keys({
     PASSWORD_SALT_ROUNDS: Joi.number().required(),
     AUTH_TOKEN_SECRET: Joi.string().required(),
-  }).unknown(true);;
+  }).unknown(true);
 
   const {
     error,
