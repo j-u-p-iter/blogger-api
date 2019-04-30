@@ -73,17 +73,23 @@ export const createPostController = ({
   };
 
   const update = async (req, res) => {
-    const { body: postData, params: { postId } } = req;
+    const { user: { id: userId }, body: postData, params: { postId } } = req;
 
     const [readError, postToCheck] = await to(postModel.readById(postId))
-
-    // need to check, that postToCheck author field value is equal to req.user.id
 
     if (readError) {
       return responseWithError({
         res,
         err: { message: `No post with id ${postId}` },
         status: HTTPStatus.NOT_FOUND,
+      });
+    }
+
+    if (String(userId) !== String(postToCheck.author)) {
+      return responseWithError({
+        res,
+        err: { message: 'Post can be updated only by author' },
+        status: HTTPStatus.FORBIDDEN,
       });
     }
 

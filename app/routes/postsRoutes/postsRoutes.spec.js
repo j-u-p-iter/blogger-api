@@ -235,6 +235,50 @@ describe('postsRoutes', () => {
         });
       });
 
+      describe('when tries to update not his own post', () => {
+        let firstUserAccessToken;
+        let secondUserAccessToken;
+        let postId;
+
+        beforeAll(async (done) => {
+          const firstUserToCreate = { name: 'firstUserName', email: 'first@email.com', password: '12345' };
+
+          ({ accessToken: firstUserAccessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: firstUserToCreate,
+          }));
+          
+          const secondUserToCreate = { name: 'secondUserName', email: 'second@email.com', password: '12345' };
+
+          ({ accessToken: secondUserAccessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: secondUserToCreate,
+          }));
+
+          const createPostUrl = postsUrls.post(); 
+
+          const postToCreate = {
+            title: generateString(20),
+            body: generateString(270),
+          };
+
+          ({ body: { post: { id: postId } } } = await extractResponse(sendRequestWithToken(request.post(createPostUrl, postToCreate), firstUserAccessToken)));
+
+          done();
+        });
+
+        it('returns correct error', async () => {
+          const url = postsUrls.put(postId);
+
+          const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.put(url), secondUserAccessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Post can be updated only by author');
+        });
+      })
       describe('when update post, that presents in DB', () => {
         let postId;
         let accessToken;
