@@ -23,11 +23,6 @@ describe('postsRoutes', () => {
     extractResponse = dic.resolve('utils').extractResponse;
   });
 
-  afterEach((done) => {
-    postModel.deleteAll(done);
-    userModel.deleteAll(done);
-  });
-
   describe('post to api/v1/posts', () => {
     describe('for signed in user', () => {
       it('create post properly', async () => {

@@ -15,10 +15,6 @@ describe('authRoutes', () => {
     extractResponse = dic.resolve('utils').extractResponse;
   });
 
-  afterEach((done) => {
-    userModel.deleteAll(done);
-  });
-
   describe('post to api/v1/sign-up', () => {
     describe('with correct data', () => {
       it('creates user and sign in him', async () => {

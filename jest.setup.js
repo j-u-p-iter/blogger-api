@@ -5,8 +5,15 @@ beforeAll(async () => {
   await runApp();
 })
 
-afterAll(() => {
-  dic.resolve('httpServer').close();
-  dic.resolve('database').close();
-  dic.resolve('redisProvider').quit();
+
+afterEach(() => {
+  dic.resolve('database').clearDB();
+});
+
+afterAll(async () => {
+  await Promise.all([
+    dic.resolve('httpServer').close(),
+    dic.resolve('database').close(),
+    dic.resolve('redisProvider').quit(),
+  ]);
 });

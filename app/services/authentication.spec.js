@@ -5,12 +5,8 @@ import { runApp } from '../.';;
 describe('createAuthenticationService', () => {
   let authenticationService;
 
-  beforeAll((done) => {
-    runApp(() => {
-      authenticationService = dic.resolve('authenticationService');
-
-      done();
-    });
+  beforeAll(() => {
+    authenticationService = dic.resolve('authenticationService');
   });
 
   it('hashes password properly', async () => {

@@ -18,5 +18,17 @@ export const createMongooseDBProvider = ({
 
   const close = () => mongoose.connection.close();
 
-  return { connect, close };
+  const clearDB = () => {
+    const collections = mongoose.connection.collections;
+
+    for (const collectionName in collections) {
+      collections[collectionName].remove();  
+    }
+  };
+
+  return { 
+    connect, 
+    close,
+    clearDB,
+  };
 };

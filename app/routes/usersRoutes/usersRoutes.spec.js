@@ -15,10 +15,6 @@ describe('usersRoutes', () => {
     extractResponse = dic.resolve('utils').extractResponse;
   });
 
-  afterEach((done) => {
-    userModel.deleteAll(done);
-  });
-
   describe('get to api/v1/users', () => {
     let insertingUsers;
 
