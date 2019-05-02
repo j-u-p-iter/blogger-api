@@ -12,16 +12,19 @@ export const runApp = (onSuccessRun = () => {}) => {
     SERVER_HOST,
   } = dic.resolve('configs');
 
-  
+  process.on('unhandledRejection', (error) => {
+    /* eslint-disable-next-line */
+    console.error('Uncaught error:', error);
+  });
 
-  Promise.all([
+  return Promise.all([
     dic.resolve('database').connect(),
     dic.resolve('redisProvider').create(),
   ])
     .then(() => {
       dic.resolve('cacheService');
 
-      dic.resolve('httpServer').listen()
+      return dic.resolve('httpServer').listen()
         .then(() => {
           /* eslint-disable-next-line */
           console.log(`Server is running on ${makeUrl({ host: SERVER_HOST, port: SERVER_PORT })}`);
@@ -37,9 +40,4 @@ export const runApp = (onSuccessRun = () => {}) => {
       /* eslint-disable-next-line */
       console.log('Database connection error: ', error);
     });
-
-  process.on('unhandledRejection', (error) => {
-    /* eslint-disable-next-line */
-    console.error('Uncaught error:', error);
-  });
 };
