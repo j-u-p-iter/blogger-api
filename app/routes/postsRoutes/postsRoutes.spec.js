@@ -13,28 +13,19 @@ describe('postsRoutes', () => {
   let extractResponse;
   let authUrls;
 
-  beforeAll((done) => {
-    runApp(() => {
-      postModel = dic.resolve('postModel');
-      userModel = dic.resolve('userModel');
+  beforeAll(() => {
+    postModel = dic.resolve('postModel');
+    userModel = dic.resolve('userModel');
 
-      postsUrls = dic.resolve('postsUrls');
-      authUrls = dic.resolve('authUrls');
+    postsUrls = dic.resolve('postsUrls');
+    authUrls = dic.resolve('authUrls');
 
-      extractResponse = dic.resolve('utils').extractResponse;
-
-      done();
-    });
+    extractResponse = dic.resolve('utils').extractResponse;
   });
 
   afterEach((done) => {
     postModel.deleteAll(done);
     userModel.deleteAll(done);
-  });
-
-  afterAll(() => {
-    dic.resolve('httpServer').close();
-    dic.resolve('database').close();
   });
 
   describe('post to api/v1/posts', () => {

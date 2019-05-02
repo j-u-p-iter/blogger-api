@@ -9,23 +9,14 @@ describe('usersRoutes', () => {
   let usersUrls;
   let extractResponse;
 
-  beforeAll((done) => {
-    runApp(() => {
-      userModel = dic.resolve('userModel');
-      usersUrls = dic.resolve('usersUrls');
-      extractResponse = dic.resolve('utils').extractResponse;
-
-      done();
-    });
+  beforeAll(() => {
+    userModel = dic.resolve('userModel');
+    usersUrls = dic.resolve('usersUrls');
+    extractResponse = dic.resolve('utils').extractResponse;
   });
 
   afterEach((done) => {
     userModel.deleteAll(done);
-  });
-
-  afterAll(() => {
-    dic.resolve('httpServer').close();
-    dic.resolve('database').close();
   });
 
   describe('get to api/v1/users', () => {

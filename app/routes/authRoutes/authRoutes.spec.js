@@ -9,23 +9,14 @@ describe('authRoutes', () => {
   let extractResponse;
   let userModel;
 
-  beforeAll((done) => {
-    runApp(() => {
-      userModel = dic.resolve('userModel');
-      authUrls = dic.resolve('authUrls');
-      extractResponse = dic.resolve('utils').extractResponse;
-
-      done();
-    });
+  beforeAll(() => {
+    userModel = dic.resolve('userModel');
+    authUrls = dic.resolve('authUrls');
+    extractResponse = dic.resolve('utils').extractResponse;
   });
 
   afterEach((done) => {
     userModel.deleteAll(done);
-  });
-
-  afterAll(() => {
-    dic.resolve('httpServer').close();
-    dic.resolve('database').close();
   });
 
   describe('post to api/v1/sign-up', () => {
