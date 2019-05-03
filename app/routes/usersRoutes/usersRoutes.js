@@ -1,5 +1,7 @@
 export const createUsersRoutes = ({
   router,
+  verifyUserMiddleware,
+  verifyAdminMiddleware,
   userController: {
     create, 
     readAll, 
@@ -8,7 +10,7 @@ export const createUsersRoutes = ({
     deleteOne,
   },
 }) => {
-  router.post('/', create);
+  router.post('/', verifyUserMiddleware, verifyAdminMiddleware, create);
 
   router.get('/', readAll);
 

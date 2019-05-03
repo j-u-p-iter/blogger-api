@@ -42,6 +42,7 @@ import {
 import { 
   createMiddlewares, 
   createVerifyUserMiddleware,
+  createVerifyAdminMiddleware,
 } from 'middlewares';
 
 import { createUtils, setupEnvironment } from 'utils';
@@ -94,6 +95,7 @@ diContainer.register({
 
   middlewares: asFunction(createMiddlewares),
   verifyUserMiddleware: asFunction(createVerifyUserMiddleware),
+  verifyAdminMiddleware: asFunction(createVerifyAdminMiddleware),
 
   utils: asFunction(createUtils),
 
