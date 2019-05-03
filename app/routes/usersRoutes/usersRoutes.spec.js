@@ -126,11 +126,52 @@ describe('usersRoutes', () => {
     
     describe('when creator of the user is invalid', () => {
       describe('when creator of the user is not signed in', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.post();
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+            },
+          } = await extractResponse(request.post(url).send(userToCreate));
 
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only for authenticated users');
+        });
       });
 
       describe('when creator of the user is not an admin', () => {
+        let accessToken;
         
+        beforeAll(async () => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { 
+              name: 'somename', 
+              email: 'some@email.com', 
+              password: '12345',
+            } 
+          }));
+        });
+
+        it('returns correct error', async () => {
+          const url = usersUrls.post();
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+              message,
+            },
+          } = await extractResponse(sendRequestWithToken(request.post(url).send(userToCreate), accessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only admins');
+        });
       });
     });
 
