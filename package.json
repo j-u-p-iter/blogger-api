@@ -4,7 +4,7 @@
   "description": "The greatest blog api ever",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_PATH=./app NODE_ENV=test jest",
+    "test": "NODE_PATH=./app NODE_ENV=test jest --runInBand",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2 start pm2.dev.json",
     "stop:dev": "pm2 stop blogger-api"

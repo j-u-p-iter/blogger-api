@@ -2,7 +2,7 @@ import { dic } from 'dic';
 import { makeUrl } from '@j.u.p.iter/node-utils';
 
 
-export const runApp = (onSuccessRun = () => {}) => {
+export const runApp = () => {
   const setupEnvironment = dic.resolve('setupEnvironment');
 
   setupEnvironment();
@@ -28,8 +28,6 @@ export const runApp = (onSuccessRun = () => {}) => {
         .then(() => {
           /* eslint-disable-next-line */
           console.log(`Server is running on ${makeUrl({ host: SERVER_HOST, port: SERVER_PORT })}`);
-
-          onSuccessRun();
         })
         .catch((error) => {
           /* eslint-disable-next-line */
