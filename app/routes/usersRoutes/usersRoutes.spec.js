@@ -176,7 +176,7 @@ describe('usersRoutes', () => {
     });
 
     describe('when creator of the user is valid', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         ({ accessToken } = await signUpUser({ 
           extractResponse,
           url: authUrls.signUp(), 
@@ -217,8 +217,8 @@ describe('usersRoutes', () => {
         let userToCreate;
 
         beforeAll(async () => {
-        userToCreate = {
-            name: 'someName',
+          userToCreate = {
+            name: 'oneMoreName',
             email: 'invalidEmail',
             password: '12345',
           };
@@ -226,11 +226,14 @@ describe('usersRoutes', () => {
 
         it('returns correct error', async () => {
           const url = usersUrls.post(); 
-          const { status, body: error } = await extractResponse(request.post(url).send(userToCreate));
+          const { 
+            status, 
+            body: { success, error }, 
+          } = await extractResponse(sendRequestWithToken(request.post(url).send(userToCreate), accessToken));
 
           expect(status).toBe(HTTPStatus.BAD_REQUEST);
-          expect(error.success).toBe(false);
-          expect(error.error).toBeDefined();
+          expect(success).toBe(false);
+          expect(error).toBeDefined();
         });
       });
     });
