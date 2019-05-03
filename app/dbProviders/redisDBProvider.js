@@ -12,11 +12,7 @@ export const createRedisDBProvider = () => {
     return client;
   } 
 
-  const quit = () => { 
-    console.log('quit client');
-
-    return client.end(true);
-  }
+  const quit = () => client.quit();
 
   return {
     create,
