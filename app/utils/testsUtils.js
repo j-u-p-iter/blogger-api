@@ -18,7 +18,7 @@ export const generateEmail = length => {
   const localPart = generateString(7);
   const domain = generateString(8);
 
-  const resultEmail = `${localPart}@${domain}.com`;
+  const resultEmail = `${localPart}@${domain}.com`.toLowerCase();
 
   return resultEmail;
 };
