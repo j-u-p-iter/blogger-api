@@ -29,7 +29,7 @@ describe('usersRoutes', () => {
 
     beforeAll(async () => {
       insertingUsers = [{
-        name: generateString()
+        name: generateString(),
         email: generateEmail(),
         password: 12345,
       }, {
@@ -285,7 +285,7 @@ describe('usersRoutes', () => {
         });
       });
 
-      describe('when creator of the user is not an admin', () => {
+      describe('when updator of the user is not an admin', () => {
         let accessToken;
         
         beforeAll(async () => {
@@ -318,40 +318,57 @@ describe('usersRoutes', () => {
       });
     });
 
-    describe('with correct user id', () => {
-      it('updates user properly', async () => {
-        const url = usersUrls.patch(userToUpdate._id);
-        const dataToUpdate = { name: generateString(), email: generateEmail() }
-        const { 
-          status, 
-          body: { 
-            user,
-            success, 
-            message,
+    describe('when updator of user is valid', () => {
+      let accessToken;
+      
+      beforeEach(async () => {
+        ({ accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { 
+            name: generateString(), 
+            email: generateEmail(), 
+            password: '12345',
+            role: 'admin',
           } 
-        } = await extractResponse(request.put(url).send(dataToUpdate));
-
-        expect(status).toBe(HTTPStatus.OK);
-        expect(success).toBe(true);
-        expect(message).toBe('Update user with success')
-        expect(user.name).toBe(dataToUpdate.name);
-        expect(user.email).toBe(dataToUpdate.email);
-        expect(user.password).not.toBeDefined();
-        expect(user._id).not.toBeDefined();
-        expect(user.id).toBeDefined();
+        }));
       });
-    });
 
-    describe('with incorrect id', () => {
-      it('returns correct error', async () => {
-        const url = usersUrls.patch(5); 
-        const { 
-          status, 
-          body, 
-        } = await extractResponse(request.put(url).send({ name: generateString(), email: generateEmail() }));
+      describe('with correct user id', () => {
+        it('updates user properly', async () => {
+          const url = usersUrls.patch(userToUpdate._id);
+          const dataToUpdate = { name: generateString(), email: generateEmail() }
+          const { 
+            status, 
+            body: { 
+              user,
+              success, 
+              message,
+            } 
+          } = await extractResponse(sendRequestWithToken(request.put(url).send(dataToUpdate), accessToken));
 
-        expect(status).toBe(HTTPStatus.BAD_REQUEST);
-        expect(body.success).toBe(false);
+          expect(status).toBe(HTTPStatus.OK);
+          expect(success).toBe(true);
+          expect(message).toBe('Update user with success')
+          expect(user.name).toBe(dataToUpdate.name);
+          expect(user.email).toBe(dataToUpdate.email);
+          expect(user.password).not.toBeDefined();
+          expect(user._id).not.toBeDefined();
+          expect(user.id).toBeDefined();
+        });
+      });
+
+      describe('with incorrect id', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.patch(5); 
+          const { 
+            status, 
+            body, 
+          } = await extractResponse(sendRequestWithToken(request.put(url).send(dataToUpdate), accessToken));
+
+          expect(status).toBe(HTTPStatus.BAD_REQUEST);
+          expect(body.success).toBe(false);
+        });
       });
     });
   });
