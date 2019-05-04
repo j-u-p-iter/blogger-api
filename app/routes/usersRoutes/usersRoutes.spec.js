@@ -376,7 +376,7 @@ describe('usersRoutes', () => {
   describe('delete to api/v1/users/:userId', () => {
     let userToDelete;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       userToDelete = {
         name: generateString(),
         email: generateEmail(),
@@ -391,30 +391,99 @@ describe('usersRoutes', () => {
       };
     });
 
-    describe('with correct id', () => {
-      it('deletes user properly', async () => {
-        const url = usersUrls.delete(userToDelete._id);
-        const { 
-          status, 
-          body: { 
-            success, 
-            message,
-          } 
-        } = await request.delete(url);
+    describe('when user, who delete user is invalid', () => {
+      describe('when user is not signed in', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.delete(userToDelete._id);
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+            },
+          } = await extractResponse(request.delete(url));
 
-        expect(status).toBe(HTTPStatus.OK);
-        expect(success).toBe(true);
-        expect(message).toBe('User deleted with success');
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only for authenticated users');
+        });
+      });
+
+      describe('when user is not an admin', () => {
+        let accessToken;
+        
+        beforeAll(async () => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { 
+              name: generateString(), 
+              email: generateEmail(), 
+              password: '12345',
+            } 
+          }));
+        });
+
+        it('returns correct error', async () => {
+          const url = usersUrls.delete();
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+              message,
+            },
+          } = await extractResponse(sendRequestWithToken(request.delete(url), accessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only admins');
+        });
       });
     });
 
-    describe('with incorrect id', () => {
-      it('returns correct error', async () => {
-        const url = usersUrls.delete(5); 
-        const { status, body: { success, error } } = await extractResponse(request.delete(url));
+    describe('when user is valid', () => {
+      let accessToken;
 
-        expect(status).toBe(HTTPStatus.BAD_REQUEST);
-        expect(success).toBe(false);
+      beforeEach(async () => {
+        ({ accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { 
+            name: generateString(), 
+            email: generateEmail(), 
+            password: '12345',
+            role: 'admin',
+          } 
+        }));
+      });
+
+      describe('with correct id', () => {
+        it('deletes user properly', async () => {
+          const url = usersUrls.delete(userToDelete._id);
+          const { 
+            status, 
+            body: { 
+              success, 
+              message,
+            } 
+          } = await extractResponse(sendRequestWithToken(request.delete(url), accessToken));
+          
+
+          expect(status).toBe(HTTPStatus.OK);
+          expect(success).toBe(true);
+          expect(message).toBe('User deleted with success');
+        });
+      });
+
+      describe('with incorrect id', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.delete(5); 
+          const { status, body: { success, error } } = await extractResponse(sendRequestWithToken(request.delete(url), accessToken));
+
+          expect(status).toBe(HTTPStatus.BAD_REQUEST);
+          expect(success).toBe(false);
+        });
       });
     });
   });
