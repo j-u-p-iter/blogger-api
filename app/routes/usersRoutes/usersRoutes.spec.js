@@ -4,14 +4,18 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../..';
 
+import { signUpUser, sendRequestWithToken } from '../../utils/testsUtils';
+
 describe('usersRoutes', () => {
   let userModel;
   let usersUrls;
   let extractResponse;
+  let authUrls;
 
   beforeAll(() => {
     userModel = dic.resolve('userModel');
     usersUrls = dic.resolve('usersUrls');
+    authUrls = dic.resolve('authUrls');
     extractResponse = dic.resolve('utils').extractResponse;
   });
 
@@ -110,57 +114,127 @@ describe('usersRoutes', () => {
   
   describe('post to api/v1/users', () => {
     let userToCreate;
+    let accessToken;
 
     beforeAll(async () => {
       userToCreate = {
-        name: 'someName',
-        email: 'some@email.com',
+        name: 'oneMoreName',
+        email: 'onemore@email.com',
         password: '12345',
       };
     });
+    
+    describe('when creator of the user is invalid', () => {
+      describe('when creator of the user is not signed in', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.post();
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+            },
+          } = await extractResponse(request.post(url).send(userToCreate));
 
-    describe('with correct data', () => {
-      it('creates user properly', async () => {
-        const url = usersUrls.post();
-        const { 
-          status, 
-          body: { 
-            user, 
-            success, 
-            message,
-          } 
-        } = await request.post(url).send(userToCreate);
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only for authenticated users');
+        });
+      });
 
-        expect(status).toBe(HTTPStatus.CREATED);
-        expect(success).toBe(true);
-        expect(message).toBe('Create user with success');
+      describe('when creator of the user is not an admin', () => {
+        let accessToken;
+        
+        beforeAll(async () => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { 
+              name: 'somename', 
+              email: 'some@email.com', 
+              password: '12345',
+            } 
+          }));
+        });
 
-        expect(user.email).toEqual(userToCreate.email);
-        expect(user.name).toEqual(userToCreate.name);
-        expect(user.password).not.toBeDefined();
-        expect(user._id).not.toBeDefined();
-        expect(user.id).toBeDefined();
+        it('returns correct error', async () => {
+          const url = usersUrls.post();
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+              message,
+            },
+          } = await extractResponse(sendRequestWithToken(request.post(url).send(userToCreate), accessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only admins');
+        });
       });
     });
 
-    describe('with incorrect data', () => {
-      let userToCreate;
-
-      beforeAll(async () => {
-       userToCreate = {
-          name: 'someName',
-          email: 'invalidEmail',
-          password: '12345',
-        };
+    describe('when creator of the user is valid', () => {
+      beforeEach(async () => {
+        ({ accessToken } = await signUpUser({ 
+          extractResponse,
+          url: authUrls.signUp(), 
+          user: { 
+            name: 'somename', 
+            email: 'some@email.com', 
+            password: '12345',
+            role: 'admin',
+          } 
+        }));
       });
 
-      it('returns correct error', async () => {
-        const url = usersUrls.post(); 
-        const { status, body: error } = await extractResponse(request.post(url).send(userToCreate));
+      describe('with correct data', () => {
+        it('creates user properly', async () => {
+          const url = usersUrls.post();
+          const { 
+            status, 
+            body: { 
+              user, 
+              success, 
+              message,
+            } 
+          } = await extractResponse(sendRequestWithToken(request.post(url).send(userToCreate), accessToken));
 
-        expect(status).toBe(HTTPStatus.BAD_REQUEST);
-        expect(error.success).toBe(false);
-        expect(error.error).toBeDefined();
+          expect(status).toBe(HTTPStatus.CREATED);
+          expect(success).toBe(true);
+          expect(message).toBe('Create user with success');
+
+          expect(user.email).toEqual(userToCreate.email);
+          expect(user.name).toEqual(userToCreate.name);
+          expect(user.password).not.toBeDefined();
+          expect(user._id).not.toBeDefined();
+          expect(user.id).toBeDefined();
+        });
+      });
+
+      describe('with incorrect data', () => {
+        let userToCreate;
+
+        beforeAll(async () => {
+          userToCreate = {
+            name: 'oneMoreName',
+            email: 'invalidEmail',
+            password: '12345',
+          };
+        });
+
+        it('returns correct error', async () => {
+          const url = usersUrls.post(); 
+          const { 
+            status, 
+            body: { success, error }, 
+          } = await extractResponse(sendRequestWithToken(request.post(url).send(userToCreate), accessToken));
+
+          expect(status).toBe(HTTPStatus.BAD_REQUEST);
+          expect(success).toBe(false);
+          expect(error).toBeDefined();
+        });
       });
     });
   });
