@@ -4,7 +4,12 @@ import HTTPStatus from 'http-status';
 import { dic } from 'dic';
 import { runApp } from '../..';
 
-import { signUpUser, sendRequestWithToken } from '../../utils/testsUtils';
+import { 
+  signUpUser, 
+  sendRequestWithToken, 
+  generateString, 
+  generateEmail,
+} from '../../utils/testsUtils';
 
 describe('usersRoutes', () => {
   let userModel;
@@ -24,12 +29,12 @@ describe('usersRoutes', () => {
 
     beforeAll(async () => {
       insertingUsers = [{
-        name: 'someName',
-        email: 'some@email.com',
+        name: generateString()
+        email: generateEmail(),
         password: 12345,
       }, {
-        name: 'oneMoreName',
-        email: 'onemore@email.com',
+        name: generateString(),
+        email: generateEmail(),
         password: 1234567,
         role: 'admin',
       }];
@@ -76,8 +81,8 @@ describe('usersRoutes', () => {
 
     beforeAll(async () => {
       userToAdd = {
-        name: 'someName',
-        email: 'some@email.com',
+        name: generateString(),
+        email: generateEmail(),
         password: 12345,
       };
 
@@ -118,8 +123,8 @@ describe('usersRoutes', () => {
 
     beforeAll(async () => {
       userToCreate = {
-        name: 'oneMoreName',
-        email: 'onemore@email.com',
+        name: generateString(),
+        email: generateEmail(),
         password: '12345',
       };
     });
@@ -150,8 +155,8 @@ describe('usersRoutes', () => {
             extractResponse,
             url: authUrls.signUp(), 
             user: { 
-              name: 'somename', 
-              email: 'some@email.com', 
+              name: generateString(), 
+              email: generateEmail(), 
               password: '12345',
             } 
           }));
@@ -181,8 +186,8 @@ describe('usersRoutes', () => {
           extractResponse,
           url: authUrls.signUp(), 
           user: { 
-            name: 'somename', 
-            email: 'some@email.com', 
+            name: generateString(), 
+            email: generateEmail(), 
             password: '12345',
             role: 'admin',
           } 
@@ -218,7 +223,7 @@ describe('usersRoutes', () => {
 
         beforeAll(async () => {
           userToCreate = {
-            name: 'oneMoreName',
+            name: generateString(),
             email: 'invalidEmail',
             password: '12345',
           };
@@ -240,12 +245,17 @@ describe('usersRoutes', () => {
   });
 
   describe('put to api/v1/users/:userId', () => {
+    let dataToUpdate;
     let userToUpdate;
 
-    beforeAll(async () => {
+    beforeAll(() => {
+      const dataToUpdate = { name: generateString(), email: generateEmail() }
+    });
+
+    beforeEach(async () => {
       userToUpdate = {
-        name: 'someName',
-        email: 'some@email.com',
+        name: generateString(),
+        email: generateEmail(),
         password: 12345,
       };
 
@@ -257,10 +267,61 @@ describe('usersRoutes', () => {
       };
     });
 
+    describe('when updator of the user is invalid', () => {
+      describe('when updator of the user is not signed in', () => {
+        it('returns correct error', async () => {
+          const url = usersUrls.patch(userToUpdate._id);
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+            },
+          } = await extractResponse(request.put(url).send(dataToUpdate));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only for authenticated users');
+        });
+      });
+
+      describe('when creator of the user is not an admin', () => {
+        let accessToken;
+        
+        beforeAll(async () => {
+          ({ accessToken } = await signUpUser({ 
+            extractResponse,
+            url: authUrls.signUp(), 
+            user: { 
+              name: generateString(), 
+              email: generateEmail(), 
+              password: '12345',
+            } 
+          }));
+        });
+
+        it('returns correct error', async () => {
+          const url = usersUrls.patch(userToUpdate._id);
+          const { 
+            status, 
+            body: { 
+              error, 
+              success, 
+              message,
+            },
+          } = await extractResponse(sendRequestWithToken(request.put(url).send(dataToUpdate), accessToken));
+
+          expect(status).toBe(HTTPStatus.FORBIDDEN);
+          expect(success).toBe(false);
+          expect(error).toBe('Accessable only admins');
+        });
+      });
+    });
+
     describe('with correct user id', () => {
       it('updates user properly', async () => {
         const url = usersUrls.patch(userToUpdate._id);
-        const dataToUpdate = { name: 'someNewName', email: 'new@email.com' }
+        const dataToUpdate = { name: generateString(), email: generateEmail() }
         const { 
           status, 
           body: { 
@@ -287,8 +348,7 @@ describe('usersRoutes', () => {
         const { 
           status, 
           body, 
-        } = await extractResponse(request.put(url).send({ name: 'someNewName', email: 'new@email.com' }
-));
+        } = await extractResponse(request.put(url).send({ name: generateString(), email: generateEmail() }));
 
         expect(status).toBe(HTTPStatus.BAD_REQUEST);
         expect(body.success).toBe(false);
@@ -301,8 +361,8 @@ describe('usersRoutes', () => {
 
     beforeAll(async () => {
       userToDelete = {
-        name: 'someName',
-        email: 'some@email.com',
+        name: generateString(),
+        email: generateEmail(),
         password: 12345,
       };
 

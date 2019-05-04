@@ -4,7 +4,7 @@ const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 const getRandomLetter = () => letters[Math.floor(Math.random() * letters.length)];
 
-export const generateString = length => {
+export const generateString = (length = 5) => {
   let resultString = getRandomLetter();
 
   while(resultString.length !== length) {
@@ -12,6 +12,15 @@ export const generateString = length => {
   }
 
   return resultString;
+};
+
+export const generateEmail = length => {
+  const localPart = generateString(7);
+  const domain = generateString(8);
+
+  const resultEmail = `${localPart}@${domain}.com`;
+
+  return resultEmail;
 };
 
 export const signUpUser = async ({ url, user, extractResponse }) => {
