@@ -1,0 +1,1 @@
+export { createRedisConfig } from './redisConfig';

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createRedisConfig(environmentObject) when REDIS_PORT and REDIS_HOST were defined should return correct config 1`] = `
+Object {
+  "REDIS_HOST": "redis-host",
+  "REDIS_PORT": 5000,
+}
+`;
