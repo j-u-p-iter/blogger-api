@@ -52,7 +52,7 @@ describe('createServerConfig(environmentObject)', () => {
   });
 
   describe('when SERVER_HOST is not a string', () => {
-    it('should throw', () => {
+   it('should throw', () => {
       const environmentObject = {
         SERVER_PORT: 5000,
         SERVER_HOST: 12345,
