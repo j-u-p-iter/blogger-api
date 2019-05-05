@@ -2,7 +2,7 @@ import { createServerConfig } from '../serverConfig';
 
 
 describe('createServerConfig(environmentObject)', () => {
-  describe('when SERVER_PORT and SERVER_HOST was defined', () => {
+  describe('when SERVER_PORT and SERVER_HOST were defined', () => {
     it('should return correct config', () => {
       const SERVER_PORT = 2000;
       const SERVER_HOST = 'some-host';
