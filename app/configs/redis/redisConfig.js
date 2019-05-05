@@ -12,7 +12,7 @@ export const createRedisConfig = (environmentObject) => {
     value: envVars,
   } = Joi.validate(environmentObject, envVarsSchema);
 
-  if (error) { throw Error(`Server config validation error: ${error}`); }
+  if (error) { throw Error(`Redis config validation error: ${error}`); }
 
   const { REDIS_PORT, REDIS_HOST } = envVars;
   const redisConfig = { REDIS_PORT, REDIS_HOST };
