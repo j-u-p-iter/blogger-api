@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createServerConfig(environmentObject) when SERVER_PORT and SERVER_HOST was defined should return correct config 1`] = `
+exports[`createServerConfig(environmentObject) when SERVER_PORT and SERVER_HOST were defined should return correct config 1`] = `
 Object {
   "SERVER_HOST": "some-host",
   "SERVER_PORT": 2000,
