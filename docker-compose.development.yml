@@ -16,3 +16,11 @@ services:
     ports: 
       - '8000:5000'
 
+  tests:
+    build:
+      context: .
+      dockerfile: .docker/app.development.dockerfile 
+    volumes:
+      - /usr/app/node_modules 
+      - .:/usr/app
+    command: ["yarn", "run", "test:watch"]
