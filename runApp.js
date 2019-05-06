@@ -1,1 +1,0 @@
-export { runApp } from './app';
