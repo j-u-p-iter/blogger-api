@@ -45,7 +45,7 @@ import {
   createVerifyAdminMiddleware,
 } from 'middlewares';
 
-import { createUtils, setupEnvironment } from 'utils';
+import { createUtils, etupEnvironment } from 'utils';
 import { createUsersUrls, createAuthUrls, createPostsUrls } from 'urls';
 
 

@@ -7,7 +7,9 @@
     "test": "NODE_PATH=./app NODE_ENV=test jest --runInBand",
     "test:watch": "yarn test --watch",
     "start:dev": "pm2-runtime start ecosystem.config.js",
-    "stop:dev": "pm2 stop blogger-api"
+    "stop:dev": "pm2-runtime stop blogger-api",
+    "start:prod": "NODE_PATH=./dist node dist/index.js",
+    "build": "babel app -d dist --copy-files"
   },
   "repository": {
     "type": "git",
@@ -40,6 +42,7 @@
     "validator": "^10.11.0"
   },
   "dependencies": {
+    "@babel/cli": "^7.4.4",
     "@j.u.p.iter/node-utils": "^1.1.0",
     "await-to-js": "^2.0.1",
     "awilix": "^3.0.9",

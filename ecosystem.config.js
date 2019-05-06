@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'blogger-api',
-    script: './index.js',
+    script: './app/index.js',
     watch: true,
     interpreter: 'babel-node',
     env: {
